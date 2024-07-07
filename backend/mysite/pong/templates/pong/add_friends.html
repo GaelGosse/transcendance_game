@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if error_message.value %}
+    <p>{{error_message.message}}</p>
+{% endif %} 
+<h1>Type the pseudo of your friend</h1>
+<form action="{% url 'add_friends' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="friend_pseudo" placeholder="pseudo">
+    <input type="submit" value="confirmed">
+</form>
+
+{% endblock %}

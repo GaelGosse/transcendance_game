@@ -1,0 +1,165 @@
+.title_index{
+	color: #288c85;
+	/* font-family: "HK Modular", sans-serif; */
+	font-size: clamp(1.5rem, 5vw, 5rem);
+	text-shadow: 
+        0 0 2px #000,
+        0 0 5px #333, 
+        0 0 10px #555,
+        0 0 20px #777,
+        1px 1px 5px black,
+        -1px -1px 5px black,
+        1px -1px 5px black,
+        -1px 1px 5px black;
+        /* 0 0 2px #288c85,
+        0 0 5px #288c85,
+        0 0 10px #288c85,
+        0 0 20px #288c85,
+        0 0 30px #288c85; */
+    /* font-weight: bold; */
+	/* animation: subtleNeon 2s ease-in-out infinite alternate;  */
+	display: flex;
+    justify-content: center;
+    position: relative;
+    top: 10px;
+    left: 6px; 
+    /* bottom: 50px; */
+}
+
+@media (max-width: 767px) {
+    .title_index {
+      font-size: 1.5rem; /* Adjust the font size for smaller screens */
+    }
+}
+
+.index_page_links_login{
+    color: #ff914d;
+    /* font-family: "HK Modular"; */
+    font-size: clamp(1.5rem, 3vw, 5rem);
+    position: relative;
+    top: 285px;
+    /* font-weight: 100; */
+    text-shadow: 
+        0 0 5px #ff914d,
+        0 0 10px #ff914d,
+        1px 1px 30px black,
+        -1px -1px 30px black,
+        1px -1px 30px black,
+        -1px 1px 30px black;
+
+        /* 0 0 15px #ff914d; */
+        /* 0 0 20px #ff914d,
+        0 0 30px #ff914d */
+        /* 0 0 40px #ff914d,
+        0 0 50px #ff914d,
+        0 0 60px #ff914d; */
+    /* text-shadow: 
+        0 0 2px #000, Ombres subtiles en noir 
+        0 0 5px #333, 
+        0 0 10px #555,
+        0 0 20px #777; */
+    /* animation: Neon 1.5s infinite alternate;  */
+}
+
+
+.index_page_text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.index_page_text a{
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+
+.index_page_links_signup{
+    color: #7900ff;
+    /* font-family: "HK Modular"; */
+    font-size: clamp(1.5rem, 3vw, 5rem);
+    position: relative;
+    top: 270px;
+    text-shadow: 
+        0 0 2px #000, /* Ombres subtiles en noir */
+        0 0 5px #333, 
+        0 0 10px #555,
+        0 0 20px #777,
+        1px 1px 10px black,
+        -1px -1px 10px black,
+        1px -1px 10px black,
+        -1px 1px 10px black;
+    /* animation: subtleNeon 2s ease-in-out infinite alternate;  */
+
+}
+
+.fixed_header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+    z-index: 1030;
+}
+
+.body_index{
+    background-image: url("../image/fond_retro_9.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    /* background-attachment: fixed; */
+}
+
+
+/* Ajout d'une animation pour un effet pulsant subtil */
+@keyframes subtleNeon {
+    0%, 100% {
+        text-shadow: 
+            0 0 2px #000,
+            0 0 5px #333,
+            0 0 10px #555,
+            0 0 20px #777;
+    }
+    50% {
+        text-shadow: 
+            0 0 4px #000,
+            0 0 8px #333,
+            0 0 16px #555,
+            0 0 32px #777;
+    }
+}
+
+@keyframes Neon {
+    0%, 100% {
+        text-shadow: 
+            0 0 2px #ff914d,
+            0 0 5px #ff914d,
+            0 0 10px #ff914d,
+            0 0 20px #ff914d;
+    }
+    50% {
+        text-shadow: 
+            0 0 4px #ff914d
+            0 0 8px #ff914d,
+            0 0 16px #ff914d,
+            0 0 32px #ff914d;
+    }
+}
+
+* {
+  font-family: "Tilt Neon", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  font-variation-settings:
+    "XROT" 0,
+    "YROT" 0;
+}

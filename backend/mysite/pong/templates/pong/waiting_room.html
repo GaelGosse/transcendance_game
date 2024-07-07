@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Pong - The Game{% endblock %}
+
+{% block css%}
+	<style>
+		h1
+		{
+			width: max-content;
+			margin: 1% auto;
+			display: block;
+			color: white;
+		}
+	</style>
+{% endblock css %}
+
+{% block content %}
+	<h1 id="status">Waiting for a match...</h1>
+	<script>
+
+		let interval = setInterval(function() {
+
+			console.log(" ----- 5000ms ----- ");
+
+			$.ajax({
+				url: '/check_match/',
+				success: function(data) {
+					console.log(data);
+					if (data.match_found) {
+						document.getElementById('status').textContent = 'Match found! Loading the game...';
+						$.ajax({
+							url: '/game_page/' + data.party_id,
+							success: function(game_page_html) {
+								clearInterval(interval);
+								var script = document.createElement("script");
+								script.src = "/static/pong/js/game_page.js";
+								document.body.appendChild(script);
+								document.body.querySelector('main').innerHTML = game_page_html;
+								document.getElementById('red_user').textContent = data.red_user;
+								document.getElementById('blue_user').textContent = data.blue_user;
+							}
+						});
+						// window.location.href = '/game_page/' + data.party_id;
+						// window.url something like that
+						// data.preventDefault();
+					}
+				}
+			});
+		}, 2000);
+	</script>
+{% endblock %}

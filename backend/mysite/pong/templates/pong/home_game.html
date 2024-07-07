@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Pong - The Game{% endblock %}
+
+{% block css%}
+	<style>
+		main > h1
+		{
+			text-align: center;
+			margin: 50px auto ;
+			text-shadow: 0 0 5px rgba(0,0,0, 5);
+		}
+		section
+		{
+			/* background: rgba(0,0,0,0.5); */
+
+			max-width: 1200px;
+			margin: 50px auto 0;
+
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			flex-direction: row;
+		}
+		section a
+		{
+			background: rgba(0,0,0,0.5);
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: row;
+
+			height: 50vh;
+			width: 45%;
+
+			text-decoration: none;
+			font-size: 40px;
+		}
+		section a:hover
+		{
+			transform: scale(1.1);
+		}
+		section a:active
+		{
+			transform: scale(0.9);
+		}
+	</style>
+{% endblock css %}
+
+{% block content %}
+	<h1>Choose a game</h1>
+
+	<section>
+		<a href="/tictactoe">Tic Tac Toe</a><!--
+		--><a href="/waiting_room">Pong</a>
+	</section>
+{% endblock %}

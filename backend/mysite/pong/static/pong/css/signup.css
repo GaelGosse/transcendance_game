@@ -1,0 +1,160 @@
+main{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
+
+	margin: 0 0;
+	padding: 100px 30px 30px;
+
+	height: calc(100% - 90px);
+
+}
+
+header{
+	display: none;
+}
+
+h1
+{
+	color: var(--light-blue);
+	text-shadow: 
+		0 0 5px var(--blue),
+		0 0 10px var(--blue),
+		0 0 20px black;
+	font-size: 45px;
+	text-transform: uppercase;
+	/* position: absolute;
+	top: 20%;
+	left: 50%;
+	transform: translate(-50%, -20%); */
+}
+
+section
+{
+	background: rgba(0, 0, 0, 0.5);
+	position: relative;
+	width: 100%;
+	padding: 30px;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+section > *
+{
+	width: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center; 
+	flex-direction: column;
+}
+
+form label
+{
+	color: var(--light-blue);
+	text-shadow: 
+		0 0 5px var(--blue),
+		0 0 10px var(--blue),
+		0 0 20px black;
+	font-size: 18px;
+	text-transform: uppercase;
+}
+
+form input
+{
+	margin: 0 0 4%;
+	padding: 1% 4%;
+	font-size: 15px;
+	/* text-transform: uppercase; */
+}
+
+input[type="submit"]
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	text-transform: uppercase;
+	background: none;
+
+	color: var(--light-green);
+	font-size: 45px;
+	text-shadow: 
+	0 0 5px var(--green),
+	0 0 8px var(--green),
+	0 0 10px black;
+	border-radius: 5px;
+}
+
+input[type="submit"]:hover
+{
+	cursor: pointer;
+	text-shadow: 
+		0 0 15px black,
+		0 0 10px var(--green),
+		0 0 5px var(--green),
+		0 0 5px var(--green),
+		0 0 5px var(--green),
+		0 0 5px white;
+	background: none;
+	transform: translate(-50%, -50%) scale(1.15);
+}
+
+.avatar
+{
+	border-radius: 5px;
+	background: linear-gradient(var(--input) 50%, gray) ;
+	padding: 2% 6%;
+	margin: 2% 0;
+	text-shadow: none;
+	color: var(--light-blue);
+	text-shadow: 
+		0 0 5px var(--blue),
+		0 0 10px var(--blue),
+		0 0 20px black;
+}
+.avatar:hover
+{
+	/* background: var(); */
+	cursor: pointer;
+	
+	transform: scale(1.1);
+	color: var(--blue);
+	text-shadow: none;
+}
+
+section p,
+section a
+{
+	text-align: center;
+	display: inline-block;
+	color: var(--input);
+	text-shadow: 0 0 5px var(--orange);
+	text-transform: uppercase;
+	font-size: 20px;
+}
+
+section a
+{
+	font-weight: bold;
+}
+
+section a:hover
+{
+	cursor: pointer;
+	text-shadow: 
+		0 0 15px black,
+		0 0 10px var(--orange),
+		0 0 5px var(--orange),
+		0 0 5px var(--orange),
+		0 0 5px var(--orange);
+	transform: scale(1.1);
+}
+
+.login
+{
+	margin-bottom: 5%;
+}

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: database
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - transcendance
+    restart: always
+    env_file: .env
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/mysite:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - transcendance
+    restart: on-failure
+    env_file: .env
+
+volumes:
+ db_data:
+    driver: local
+
+ backend_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/gael/Desktop/data/backend
+
+networks:
+  transcendance:
+    name: transcendance

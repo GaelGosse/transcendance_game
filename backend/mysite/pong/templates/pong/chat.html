@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Pong - Chat{% endblock %}
+
+{% block css%}<link href="{% static 'pong/css/chat.css' %}" rel="stylesheet">{% endblock css %}
+
+<!-- <img src="{% static 'pong/image/chat.css' %}" style="visibility: visible;"> -->
+
+{% block content %}
+	<section>
+		<aside>
+			<ul class="text-center">
+				<li class="clickable-element">Imrane</li>
+				<li class="clickable-element">Gael</li>
+				<li class="clickable-element">Cyril</li>
+				<li class="clickable-element">Mathieu</li>
+			</ul>
+		</aside>
+		<article>
+			<div class="chat"><!--
+			-->z<ul class="text-center">
+					<li class="moi">Coucou</li>
+					<li class="moi">Ca va ?</li>
+					<li class="toi">Hello bien et tout</li>
+					<li class="toi">*toi</li>
+					<li class="moi">yayayaya</li>
+					<li class="toi">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est aliquam voluptatem fugiat nam molestiae iste? Odit, praesentium sapiente quia, recusandae autem ducimus nihil fuga ullam minus placeat natus aut eius.</li>
+					<li class="toi">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est aliquam voluptatem fugiat nam molestiae iste? Odit, praesentium sapiente quia, recusandae autem ducimus nihil fuga ullam minus placeat natus aut eius.</li>
+					<li class="toi">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est aliquam voluptatem fugiat nam molestiae iste? Odit, praesentium sapiente quia, recusandae autem ducimus nihil fuga ullam minus placeat natus aut eius.</li>
+					<li class="toi">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est aliquam voluptatem fugiat nam molestiae iste? Odit, praesentium sapiente quia, recusandae autem ducimus nihil fuga ullam minus placeat natus aut eius.</li>
+					<li class="toi">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est aliquam voluptatem fugiat nam molestiae iste? Odit, praesentium sapiente quia, recusandae autem ducimus nihil fuga ullam minus placeat natus aut eius.</li>
+				</ul>
+			</div>
+			<div class="msg">
+				<input type="text"><!--
+				--><button>Envoyer</button>
+			</div>
+		</article>
+	</section>
+	<script>
+		document.addEventListener('DOMContentLoaded', (event) => {
+			const elements = document.querySelectorAll('.clickable-element');
+			elements.forEach(element => {
+				element.addEventListener('click', () => {
+					elements.forEach(el => el.classList.remove('gray-background'));
+					element.classList.add('gray-background');
+				});
+			});
+		});
+	</script>
+{% endblock %}

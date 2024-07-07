@@ -1,0 +1,170 @@
+:root{
+	--margin-header: 5vh;
+	/* --width-send: 150px; */
+}
+
+section
+{
+	width: 90%;
+	height: calc(100vh - (2 * var(--margin-header)) - 90px);
+	margin: var(--margin-header) 5%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+section > *
+{
+	display: inline;
+}
+
+article
+{
+	position: relative;
+	background: rgba(0, 0, 0, 0.3);
+	width: 65%;
+}
+
+.msg
+{
+	/* background: rgba(0, 0, 255, 0.5); */
+	padding: 10px 0px;
+	
+	box-shadow: 0 -5px 5px -0.1em rgba(255, 255, 255, .5);
+
+	width: 100%;
+
+	position: absolute;
+	bottom: 0%;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.msg *
+{
+	display: inline-block;
+}
+
+.msg input
+{
+	width: calc(100% - (10px * 2) - 150px - 10px);
+	margin: 0 10px;
+	padding-left: 10px;
+}
+.msg button
+{
+	margin: 0 10px 0 0 ;
+	width: 150px;
+}
+
+
+.chat 
+{
+	overflow: scroll;
+	height: calc(100% - 46px);
+}
+
+.chat *
+{
+	margin: 0;
+	padding: 0;
+	
+}
+
+.chat ul li 
+{
+	width: max-content;
+	max-width: 400px;
+	min-height: 40px;
+	
+	display: block;
+
+	margin: 10px;
+	padding: 7px 12px 3px;
+	
+	border: solid 2px black;
+	border-radius: 20px;
+}
+
+.chat .moi
+{
+	background: var(--orange);
+}
+
+.chat .toi
+{
+	background: var(--purple);
+	/* margin-right: 5px; */
+	margin-left: 99%;
+	transform: translate(-100%, 0);
+}
+
+aside
+{
+	/* background: green; */
+	width: 35%;
+	background: rgba(0, 0, 0, 0.3);
+	border-right: solid 2px black;
+	/* display : flex; */
+	/* justify-content: center; */
+	/* flex-direction: column; */
+	/* align-items: center; */
+}
+
+aside ul
+{
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+	/* background : #f0f2f5; */
+	/* background: linear-gradient(to-bottom, #ffff, #808080); */
+	color: var(--green);
+	/* cursor: pointer; */
+	/* box-shadow: 0 -5px 5px -0.1em rgba(255, 255, 255, .5); */
+
+}
+
+aside ul li
+{
+	padding: 10px;
+	border-bottom: solid 1px black;
+	display: block;
+	width: 100%;
+	font-size: 20px;
+	font-weight: bold;
+	/* margin-bottom: 1px; */
+	/* border-radius: 5%; */
+}
+
+aside ul li:hover
+{
+	text-shadow:
+	0 0 5px white,
+	0 0 5px white;
+}
+
+.gray-background
+{
+	/* background-color: gray; */
+
+		/* Utilisation d'un dégradé linéaire de haut en bas */
+		background: linear-gradient(to bottom, #ffffff, #808080);
+	
+}
+
+
+.img_chat
+{
+	position: relative;
+	height: 10px;
+	width: 10px;
+	border-bottom-left-radius: 50%;
+	border-top-right-radius: 50%;
+	border-bottom-right-radius: 50%;
+	border-top-left-radius: 50%;
+}
+
+/* aside ul li:not(:lastchild)
+{
+	
+} */

@@ -1,0 +1,54 @@
+main
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	height: calc(100vh - 90px);
+	width: 100%;
+}
+
+.animated_text
+{
+	position: relative;
+	top: 10px;
+	color: white;
+	/* color: var(--green); */
+	/* color: black; */
+	font-size: 20px;
+	font-weight: 400;
+	background: rgba(0, 0, 0, 0.5);
+	width: 100%;
+}
+
+.blue
+{
+	color: var(--light-blue);
+	font-size: 20px;
+}
+
+.red
+{
+	color: red;
+	font-size: 20px;
+}
+
+div a
+{
+	text-decoration: none;
+	color: var(--green);
+	cursor: pointer;
+	font-size: 23px;
+
+}
+
+div a:hover
+{
+	text-shadow: 
+		0 0 5px var(--green),
+		0 0 5px var(--green),
+		0 0 5px var(--green);
+	backdrop-filter: blur(2px);
+	font-size: 25px;
+
+}
