@@ -1,0 +1,130 @@
+{% load static %}
+<style>
+h1
+{
+	width: max-content;
+	margin: 1% auto;
+	display: block;
+	color: white;
+}
+</style>
+
+<h1 id="status">Waiting for a match...</h1>
+{% csrf_token %}
+<script>
+
+var id_party = -1;
+var searchingMatchInterval = setInterval(function() {
+
+	console.log(" ----- 2000ms ----- ");
+
+	$.ajax({
+		url: '/check_pong_match/',
+		success: function(data) {
+			console.log(data);
+			if (data.match_found) {
+				id_party = data.party_id
+				clearInterval(searchingMatchInterval);
+				// document.getElementById('status').textContent = 'Match found! Loading the game...';
+
+				fetch('/pong_page/' + data.party_id + '/', {
+					headers: { 'X-Requested-With': 'XMLHttpRequest' }
+				})
+				.then(response => response.text())
+				.then(text => {
+					try {
+						const page_content = JSON.parse(text);
+						if (page_content.html) {
+							document.getElementById('app').innerHTML = page_content.html;
+							old_script = document.getElementById('app').querySelector("script");
+							var new_script = document.createElement('script');
+							new_script.innerHTML = old_script.textContent;
+							old_script.remove();
+							document.getElementById('app').appendChild(new_script);
+							console.log(data.red_user, data.blue_user)
+							document.getElementById('red_user').textContent = data.red_user;
+							document.getElementById('blue_user').textContent = data.blue_user;
+
+							if (currentIndex === customHistory.length - 1)
+							{
+								if (customHistory[currentIndex] != page_content.url)
+								{
+									customHistory.push(page_content.url);
+									currentIndex++;
+									toggle = true;
+								}
+							}
+							else
+							{
+								customHistory = customHistory.slice(0, currentIndex + 1);
+								console.log("Custom history quand on tronque l'historique", customHistory)
+								customHistory.push(page_content.url);
+								currentIndex = customHistory.length - 1;
+							}
+							if (toggle === true)
+								window.history.pushState({ path: page_content.url }, '', page_content.url);
+							console.log("customHistory =", customHistory);
+							console.log("currentIndex =", currentIndex);
+						}
+						else
+						{
+							console.error('page_content.html is undefined');
+							document.getElementById('app').innerHTML = text;
+						}
+					} catch (error) {
+						console.error('Error parsing JSON:', error);
+						document.getElementById('app').innerHTML = text;
+					}
+				})
+
+			} // endif match
+			else if (document.getElementById('status') && data.other_client)
+			{
+				var checkGameStatusInterval = setInterval(() => {
+					$.ajax({
+						url: '/check_game_status/' + data.party_id,
+						success: function(data_end) {
+							console.log(data_end);
+							if (data_end.party && data_end.is_ended) {
+								clearInterval(checkGameStatusInterval);
+								document.getElementById('status').textContent = 'The match is done'
+								// The game has ended. You can update the UI here.
+							}
+						}
+					})
+				}, 2000);
+				clearInterval(searchingMatchInterval);
+				document.getElementById('status').textContent = 'Match found! go to the other player client'
+			}
+		} // success ajax
+	}); // ajax searching
+}, 2000);
+
+
+
+
+				// $.ajax({
+				// 	url: '/pong_page/' + data.party_id,
+				// 	success: function(pong_page_html) {
+				// 		clearInterval(searchingMatchInterval);
+				// 		document.body.querySelector('main').innerHTML = pong_page_html.html;
+
+				// 		old_script = document.getElementById('app').querySelector("script");
+				// 		var new_script = document.createElement('script');
+				// 		new_script.innerHTML = old_script.textContent;
+				// 		for (var attr of old_script.attributes) {
+				// 			new_script.setAttribute(attr.name, attr.value);
+				// 		}
+				// 		old_script.remove();
+				// 		document.getElementById('app').appendChild(new_script);
+
+				// 		// var script = document.createElement("script");
+				// 		// script.src = "/static/pong/js/pong_page.js";
+				// 		// document.body.appendChild(script);
+
+				// 	}
+				// }); // ajax pong
+
+</script>
+
+

@@ -23,7 +23,7 @@ COPY ./mysite /code/
 COPY ./tools/server.sh ./
 # COPY . .
 
-RUN chmod +x ./server.sh
+# RUN chmod +x ./server.sh
 
 # EXPOSE 8000
 

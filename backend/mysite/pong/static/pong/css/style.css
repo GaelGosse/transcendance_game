@@ -13,10 +13,11 @@
 	font-style: normal;
 	font-size: 16px;
 
-	box-sizing: border-box;
+	box-sizing: border-box !important;
 
 	border: none;
 	list-style: none;
+	color: #666;
 }
 :root{
 	--purple: #7900ff;
@@ -67,6 +68,7 @@ header
 	align-items: center;
 	box-shadow: 0 5px 15px -.5em black;
 	backdrop-filter: blur(2px);
+	width: 100%;
 }
 
 header > *
@@ -130,43 +132,31 @@ header nav a:last-of-type
 	border-radius: 5px;
 	background: white;
 	color: var(--green);
-	width: 105px;
-	height: 36px;
+	padding-right: 0;
+}
+
+header span
+{
+	width: max-content;
+	height: 100%;
+	padding: 2px 9px;
 	display: inline-block;
-	text-align: center;
-	position: relative;
-}
-
-header nav a:last-of-type span
-{
-	position: absolute;
-	bottom: 0%;
-	left: 50%;
-	transform: translate(-50%, 70%);
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-
-	font-size: 0.7em;
-	color: #444;
-	background-color: #eee;
-
-	border-radius: 5px;
-	padding: 3px 10px 1px;
-}
-header nav a:last-of-type:hover span
-{
-	background: white;
-	color: var(--green);
-	text-shadow: none;
+	margin-right: -2px;
+	border-radius: 0px 5px 5px 0px;
+	background: #aaa7;
+	border-left: solid 1px white;
 }
 
 header nav a:last-of-type:hover
 {
 	background: none;
 	color: white;
+	text-shadow: none;
+}
+header nav a:last-of-type:hover span
+{
+	background: none;
+	color: var(--green);
 	text-shadow: none;
 }
 
@@ -176,7 +166,16 @@ input
 	border-radius: 50px;
 }
 
-main *
+#pop_up
 {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 350px;
+	height: 130px;
+	background: blue;
 	color: white;
+	font-size: 20px;
+	transform: translate(-50%, -50%);
+	z-index: 9999;
 }

@@ -1,0 +1,773 @@
+{% load static %}
+
+<style>
+	main
+	{
+		font-family: monospace;
+		/* background: black; */
+
+		width: 100%;
+		height: calc(100vh - 90px);
+
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-direction: column;
+	}
+	.popup
+	{
+		position: absolute;
+		top: 50%;
+		left: 0%;
+		transform: translate(0%, -50%);
+	}
+	canvas
+	{
+		background: rgba(0, 0, 0, 0.5);
+		/* margin-top: 34px; */
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.container
+	{
+		position: absolute;
+		top: calc(50% - 9px);
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		width: 1000px;
+		height: 620px;
+
+		animation: bg-countdown 5s ease;
+
+		filter: contrast(20);
+		background-color: none;
+		overflow: hidden;
+	}
+	.container span
+	{
+		color: rgb(190, 190, 190);
+
+		font-size: 8rem;
+		font-weight: 700;
+		text-align: center;
+		text-transform: uppercase;
+		line-height: 1;
+
+		display: block;
+		transition: all .5s ease;
+
+		opacity: 0;
+		filter: blur(0.6rem);
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		&:nth-child(1) {
+			animation: letteranim 4s ease;
+			animation-delay: 0s;
+		}
+		&:nth-child(2) {
+			animation: letteranim 4s ease;
+			animation-delay: 1s;
+		}
+		&:nth-child(3) {
+			animation: letteranim 4s ease;
+			animation-delay: 2s;
+		}
+		&:nth-child(4) {
+			animation: letteranim 4s ease;
+			animation-delay: 3s;
+		}
+	}
+	.space
+	{
+		color: white;
+	}
+	.scored
+	{
+		animation: scored 2s ease;
+	}
+	.final_score
+	{
+		box-shadow: inset 0 0 5px black;
+		text-shadow: 0 0 15px white, 0 0 10px white, 0 0 5px white;
+		font-size: 1.75em;
+	}
+	@keyframes bg-countdown
+	{
+		0% {
+			background: rgba(255, 255, 255, 1);
+			background: rgba(0, 0, 0, 1);
+		}
+		80% {
+			background: rgba(255, 255, 255, 1);
+			background: rgba(0, 0, 0, 1);
+		}
+		100% {
+			background: rgba(255, 255, 255, 0);
+			background: rgba(255, 255, 255, 0);
+		}
+	}
+	@keyframes letteranim
+	{
+		0% {
+			opacity: 0;
+			filter: blur(0.6rem);
+		}
+		5% {
+			opacity: 1;
+			filter: blur(0.2rem);
+		}
+		28% {
+			opacity: 1;
+			filter: blur(0.2rem);
+		}
+		38% {
+			opacity: 0;
+			filter: blur(0.6rem);
+		}
+		100% {
+			opacity: 0;
+			filter: blur(0.6rem);
+		}
+	}
+	@keyframes blue_win
+	{
+		0%{
+			background: #FFF !important;
+		}
+		100%{
+			background: #09F !important;
+		}
+	}
+	@keyframes red_win
+	{
+		0%{
+			background: #FFF !important;
+		}
+		100%{
+			background: #F04 !important;
+		}
+	}
+	@keyframes scored
+	{
+		0%{
+			box-shadow: inset 0 0 5px black;
+			text-shadow: 0 0 15px white, 0 0 10px white, 0 0 5px white;
+			font-size: 1.75em;
+		}
+		100%{
+			text-shadow: none;
+		}
+	}
+	@keyframes glitch
+	{
+		0% {
+			text-shadow: 0.05em 0 0 #09F, -0.03em -0.04em 0 #F04;
+		}
+		15% {
+			text-shadow: 0.05em 0 0 #09F, -0.03em -0.04em 0 #F04;
+		}
+		16% {
+			text-shadow: -0.05em -0.025em 0 #09F, 0.025em 0.035em 0 #F04;
+		}
+		49% {
+			text-shadow: -0.05em -0.025em 0 #09F, 0.025em 0.035em 0 #F04;
+		}
+		50% {
+			text-shadow: 0.05em 0.035em 0 #09F, 0.03em 0 0 #F04;
+		}
+		99% {
+			text-shadow: 0.05em 0.035em 0 #09F, 0.03em 0 0 #F04;
+		}
+		100% {
+			text-shadow: -0.05em 0 0 #09F, -0.025em -0.04em 0 #F04;
+		}
+	}
+	.glitch *, .glitch
+	{
+		letter-spacing: 15px;
+	}
+	.glitch
+	{
+		font-size: 5rem;
+		font-weight: bold;
+		text-transform: uppercase;
+		position: relative;
+		text-shadow: 0.05em 0 0 #09F, -0.04em -0.03em 0 #F04;
+		animation: glitch 725ms infinite;
+	}
+	.glitch span
+	{
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.glitch span:first-child
+	{
+		animation: glitch 500ms infinite;
+		clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+		transform: translate(-0.04em, -0.03em);
+		opacity: 0.75;
+	}
+	.glitch span:last-child
+	{
+		animation: glitch 375ms infinite;
+		clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+		transform: translate(0.04em, 0.03em);
+		opacity: 0.75;
+	}
+	#score
+	{
+		margin: 8px 0;
+
+		display: flex;
+		flex-direction: row;
+	}
+	#score span
+	{
+		width: 35px;
+		height: 35px;
+
+		padding: 0 !important;
+
+		display: flex !important;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+	#win
+	{
+		transition: 1.5s ease;
+		opacity: 0;
+		z-index: 999;
+		background: #FFF;
+
+		width: 150px;
+		height: 150px;
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.blue_win
+	{
+		animation: blue_win 1s ease;
+		animation-delay: 4s;
+		background: #09F !important;
+	}
+	.red_win
+	{
+		animation: red_win 1s ease;
+		animation-delay: 4s;
+		background: #F04 !important;
+	}
+	#score .player_name
+	{
+		width: 100px;
+	}
+	#score #red_user
+	{
+		align-items: flex-end;
+	}
+	#score #blue_user
+	{
+		align-items: flex-start;
+	}
+
+</style>
+
+	<h1>Welcome to the game!</h1>
+
+	<canvas id="board" class="border-top border-bottom border-light" width="1000px" height="620px"></canvas>
+
+	<p class="space">press SPACE to start</p>
+	<div id="score" class="text-white  m-2">
+		<span id="red_user" class="player_name text-danger">{{ user_red }}</span>
+		<span class="score d-inline-block py-1 mx-4 bg-danger" id="red_score">0</span>
+		<span class="d-inline-block py-1 ">|</span>
+		<span class="score d-inline-block py-1 mx-4 bg-primary" id="blue_score">0</span>
+		<span id="blue_user" class="player_name text-primary">{{ user_blue }}</span>
+	</div>
+
+	<div class="container">
+		<span>3</span>
+		<span>2</span>
+		<span>1</span>
+		<span class="glitch">
+			<span aria-hidden="true">play</span>
+			play
+			<span aria-hidden="true">play</span>
+		</span>
+	</div>
+
+	<div id="win" style="clip-path: polygon(0% 16%, 20% 40%, 30% 0%, 50% 40%, 70% 0%, 80% 40%, 100% 16%, 80% 90%, 20% 90%);"></div>
+
+	<script>
+// general
+var c = document.getElementById('board');
+var ctx = c.getContext("2d")
+var stop = true;
+var first_time = false;
+
+// from backend
+var party_end = "{{ party_end }}";
+var party_id = "{{ party_id }}";
+
+var user_red = "{{ user_red }}";
+var user_blue = "{{ user_blue }}";
+
+var id_red = "{{ id_red }}";
+var id_blue = "{{ id_blue }}";
+
+var alias_red = "{{ alias_red }}";
+var alias_blue = "{{ alias_blue }}";
+
+console.log("alias_red", alias_red)
+
+if (alias_blue && alias_red)
+{
+	document.getElementById('red_user').innerHTML = alias_red;
+	document.getElementById('blue_user').innerHTML = alias_blue;
+}
+
+// canva
+var w_canva = 1000;
+var h_canva = 620;
+
+// ball
+var x_ball = w_canva / 2;
+var y_ball = h_canva / 2;
+var x_ball_save = w_canva / 2;
+var y_ball_save = h_canva / 2;
+var x_speed = -10;
+var y_speed = -10;
+var ballRad = 10;
+
+// player
+var wpallet = 10;
+var hpallet = 120;
+var l_player = h_canva / 2;
+var r_player = h_canva / 2;
+
+// stats
+var start_time = Date.now();
+var end_time = 0;
+var exchanges = 0;
+
+var end_score = 1;
+var red_score = 0;
+var blue_score = 0;
+
+var red_display = document.getElementById('red_score');
+var blue_display = document.getElementById('blue_score');
+
+function drawRect(x, y, w, h, color) {
+	ctx.beginPath();
+	ctx.fillStyle = color;
+	ctx.fillRect(x, y, w, h);
+}
+
+function drawCircle(x, y, rad, color) {
+	ctx.beginPath();
+	ctx.fillStyle = color;
+	ctx.arc(x, y, rad, 0, Math.PI*2, true);
+	ctx.fill();
+}
+
+function getCookie(name) {
+	var cookieValue = null;
+	if (document.cookie && document.cookie !== '') {
+		var cookies = document.cookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = jQuery.trim(cookies[i]);
+			if (cookie.substring(0, name.length + 1) === (name + '=')) {
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
+			}
+		}
+	}
+	return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+var id_party;
+setTimeout(() => {
+	var path = window.location.pathname;
+	id_party = path.match(/\/pong_page\/(\d+)\//)
+	if (id_party)
+		id_party = id_party[1];
+	console.log("start id party: ", id_party)
+}, 4000);
+function send_score(id_party)
+{
+	if (id_party == -1 || !id_party)
+	{
+		var path = window.location.pathname;
+		var id_party = path.match(/\/pong_page\/(\d+)\//)
+		if (id_party)
+			id_party = id_party[1];
+	}
+	console.log("send_score: ", id_party, red_score, blue_score);
+	$.ajax({
+		url: '/scoring/' + id_party + '/',
+		type: 'POST',
+		async: false,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		},
+		data: {
+			'red_score': red_score,
+			'blue_score': blue_score,
+			'exchanges': exchanges,
+			'game_time': end_time - start_time,
+		},
+		success: function() {
+			if (alias_blue && alias_red)
+			{
+				fetch('/pong_page/' + data.party_id + '/', {
+					headers: { 'X-Requested-With': 'XMLHttpRequest' }
+				})
+				.then(response => response.text())
+				.then(text => {
+					try {
+						const new_page_content = JSON.parse(text);
+						if (new_page_content.html)
+						{
+							document.getElementById('app').innerHTML = new_page_content.html;
+							old_script = document.getElementById('app').querySelector("script");
+							var new_script = document.createElement('script');
+							new_script.innerHTML = old_script.textContent;
+							old_script.remove();
+							document.getElementById('app').appendChild(new_script);
+
+							if (currentIndex === customHistory.length - 1)
+							{
+								if (customHistory[currentIndex] != new_page_content.url)
+								{
+									customHistory.push(new_page_content.url);
+									currentIndex++;
+									toggle = true;
+								}
+							}
+							else
+							{
+								customHistory = customHistory.slice(0, currentIndex + 1);
+								console.log("Custom history quand on tronque l'historique", customHistory)
+								customHistory.push(new_page_content.url);
+								currentIndex = customHistory.length - 1;
+							}
+							if (toggle === true)
+								window.history.pushState({ path: new_page_content.url }, '', new_page_content.url);
+							console.log("customHistory =", customHistory);
+							console.log("currentIndex =", currentIndex);
+						}
+						else
+						{
+							console.error('new_page_content.html is undefined');
+							document.getElementById('app').innerHTML = text;
+						}
+					} catch (error) {
+						console.error('Error parsing JSON:', error);
+						document.getElementById('app').innerHTML = text;
+					}
+				})
+			}
+		}
+	});
+}
+
+function send_score_next(id_party)
+{
+	if (id_party == -1 || !id_party)
+	{
+		var path = window.location.pathname;
+		var id_party = path.match(/\/pong_page\/(\d+)\//)
+		if (id_party)
+			id_party = id_party[1];
+	}
+	console.log("send_score_next: ", id_party, red_score, blue_score);
+	$.ajax({
+		url: '/scoring_next/' + id_party + '/',
+		type: 'POST',
+		async: false,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		},
+		data: {
+			'red_score': red_score,
+			'blue_score': blue_score,
+			'exchanges': exchanges,
+			'game_time': end_time - start_time,
+		},
+		success: function(next_party) {
+			if (alias_blue && alias_red)
+			{
+				fetch('/pong_page/' + next_party.party_id + '/', {
+					headers: { 'X-Requested-With': 'XMLHttpRequest' }
+				})
+				.then(response => response.text())
+				.then(text => {
+					try {
+						const new_page_content = JSON.parse(text);
+						if (new_page_content.html)
+						{
+							document.removeEventListener('keydown', key_game);
+							document.getElementById('app').innerHTML = new_page_content.html;
+							old_script = document.getElementById('app').querySelector("script");
+							var new_script = document.createElement('script');
+							new_script.innerHTML = old_script.textContent;
+							old_script.remove();
+							document.getElementById('app').appendChild(new_script);
+							user_red = next_party.user_red;
+							user_blue = next_party.user_blue;
+
+							alias_red = next_party.alias_red;
+							alias_blue = next_party.alias_blue;
+
+							console.log("alias_red2", alias_red)
+
+							if (alias_blue && alias_red)
+							{
+								document.getElementById('red_user').innerHTML = alias_red;
+								document.getElementById('blue_user').innerHTML = alias_blue;
+							}
+
+							if (currentIndex === customHistory.length - 1)
+							{
+								if (customHistory[currentIndex] != new_page_content.url)
+								{
+									customHistory.push(new_page_content.url);
+									currentIndex++;
+									toggle = true;
+								}
+							}
+							else
+							{
+								customHistory = customHistory.slice(0, currentIndex + 1);
+								console.log("Custom history quand on tronque l'historique", customHistory)
+								customHistory.push(new_page_content.url);
+								currentIndex = customHistory.length - 1;
+							}
+							if (toggle === true)
+								window.history.pushState({ path: new_page_content.url }, '', new_page_content.url);
+							console.log("customHistory =", customHistory);
+							console.log("currentIndex =", currentIndex);
+						}
+						else
+						{
+							console.error('new_page_content.html is undefined');
+							document.getElementById('app').innerHTML = text;
+						}
+					} catch (error) {
+						console.error('Error parsing JSON:', error);
+						document.getElementById('app').innerHTML = text;
+					}
+				})
+			}
+		}
+	});
+}
+
+function move() {
+	x_ball += x_speed;
+	y_ball += y_speed;
+
+	var yl_top = l_player - hpallet / 2;
+	var yl_bottom = l_player + hpallet / 2;
+	var yr_top = r_player - hpallet / 2;
+	var yr_bottom = r_player + hpallet / 2;
+
+	if (x_ball - ballRad <= wpallet
+	&& y_ball >= yl_top && y_ball <= yl_bottom
+	&& x_speed < 0)
+	{
+		// left
+		x_speed *= -1;
+		exchanges++;
+	}
+	else if (x_ball + ballRad >= w_canva - wpallet
+	&& y_ball >= yr_top && y_ball <= yr_bottom
+	&& x_speed > 0)
+	{
+		// right
+		x_speed *= -1;
+		exchanges++;
+	}
+	else if (y_ball <= (0 + ballRad-1) || y_ball >= (h_canva - ballRad-1))
+		y_speed *= -1;
+	else if (x_ball <= (0 - ballRad-1))
+	{
+		stop = true;
+		blue_score += 1;
+
+		// the one who serves
+		if (x_speed > 0)
+			x_speed *= -1;
+
+		blue_display.textContent = blue_score;
+		blue_display.classList.add('scored');
+		setTimeout(() => {
+			blue_display.classList.remove('scored');
+		}, 2000);
+		if (blue_score < end_score)
+			setTimeout(restart, 1000);
+		else
+		{
+			end_time = Date.now();
+			document.getElementById("win").style.opacity = "1";
+			document.getElementById("win").classList.add('blue_win');
+			blue_display.classList.add('final_score');
+			setTimeout(() => {
+				if (alias_blue && alias_red)
+					send_score_next(id_party);
+				else
+					send_score(id_party);
+			}, 2000);
+		}
+	}
+	else if (x_ball >= (w_canva + ballRad+1))
+	{
+		stop = true;
+		red_score += 1;
+
+		// the one who serves
+		if (x_speed < 0)
+			x_speed *= -1;
+
+		red_display.textContent = red_score;
+		red_display.classList.add('scored');
+		setTimeout(() => {
+			red_display.classList.remove('scored');
+		}, 2000);
+		if (red_score < end_score)
+			setTimeout(restart, 1000);
+		else
+		{
+			end_time = Date.now();
+			document.getElementById("win").style.opacity = "1";
+			document.getElementById("win").classList.add('red_win');
+			red_display.classList.add('final_score');
+			setTimeout(() => {
+				if (alias_blue && alias_red)
+					send_score_next(id_party);
+				else
+					send_score(id_party);
+			}, 2500);
+		}
+	}
+}
+
+function restart() {
+	x_ball = w_canva / 2;
+	y_ball = h_canva / 2;
+	x_ball_save = w_canva / 2;
+	y_ball_save = h_canva / 2;
+	if (x_speed < 0)
+		x_speed = -5;
+	else
+		x_speed = 5;
+	y_speed = -5;
+
+	wpallet = 10;
+	hpallet = 120;
+	l_player = h_canva / 2;
+	r_player = h_canva / 2;
+	document.getElementById("win").style.opacity = "0"
+	document.getElementById("win").classList.remove('red_win')
+	document.getElementById("win").classList.remove('blue_win')
+	blue_display.classList.remove('final_score')
+	display();
+
+	setTimeout(() => {
+		stop = false;
+		frame()
+	}, 2000);
+}
+
+function display() {
+	// console.log(x_speed, y_speed);
+	ctx.clearRect(0, 0, w_canva, h_canva);
+	drawRect(0, l_player - hpallet / 2, wpallet, hpallet, "#F04");
+	drawRect(w_canva - wpallet, r_player - hpallet / 2, wpallet, hpallet, "#09F");
+	drawCircle(x_ball_save, y_ball_save, 10, "rgba(255,255,255,0.5)");
+	drawCircle(x_ball, y_ball, 10, "#FFF");
+}
+
+function frame() {
+	x_ball_save = x_ball;
+	y_ball_save = y_ball;
+	move();
+	display();
+	if (!stop)
+		requestAnimationFrame(frame);
+}
+
+display();
+setTimeout(() => {
+	stop = false;
+	start_time = Date.now()
+	// if (first_time)
+	// 	frame();
+}, 5000);
+
+// window.onbeforeunload = function() {
+// 	send_score();
+// }
+
+function key_game(e)
+{
+	console.log("-key: ", e.keyCode);
+	still_alive = Date.now();
+	if (e.keyCode == 32 && first_time == false)
+	{
+		setTimeout(() => {
+			frame()
+		}, 1500);
+		document.querySelector('.space').style.opacity = "0"
+		first_time = true;
+	}
+	if (!stop && e.keyCode == 38 && (r_player - hpallet / 2) > 0)
+		r_player -= 25; // up
+	if (!stop && e.keyCode == 40 && (r_player + hpallet / 2) < h_canva)
+		r_player += 25; // down
+
+	if (!stop && e.keyCode == 90 && (l_player - hpallet / 2) > 0)
+		l_player -= 25; // z
+	if (!stop && e.keyCode == 83 && (l_player + hpallet / 2) < h_canva)
+		l_player += 25; // s
+}
+document.removeEventListener('keydown', key_game);
+document.addEventListener('keydown', key_game)
+
+// var stillAliveInterval = setInterval(() => {
+// 	// if (still_alive )
+// 	if (Date.now()/1000 - still_alive/1000 > 15)
+// 	{
+// 		clearInterval(stillAliveInterval)
+// 		stop = true;
+// 		send_score(id_party);
+// 		document.querySelector('#pop_up').style.display = "block"
+// 		document.querySelector('#pop_up').textContent = "Your are inactive, your game is ended";
+// 		setTimeout(() => {
+// 			document.querySelector('#pop_up').style.opacity = "1";
+// 		}, 200);
+
+// 		// setTimeout(() => {
+// 		// 	document.querySelector('#pop_up').style.opacity = "0";
+// 		// 	setTimeout(() => {
+// 		// 		document.querySelector('#pop_up').style.display = "block";
+// 		// 	}, 350);
+// 		// }, 5000);
+// 	}
+// }, 4000);
+
+	</script>
+	<!-- <script src="{% static 'pong/js/pong_page.js' %}"></script> -->

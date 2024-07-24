@@ -1,0 +1,46 @@
+<!-- {% load static %}
+{% if error_message.value %}
+    <p>{{error_message.message}}</p>
+{% endif %} 
+<h1>Type the pseudo of your friend</h1>
+<form action="{% url 'add_friends' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="friend_pseudo" placeholder="pseudo">
+    <input type="submit" value="confirmed">
+</form> -->
+
+{% load static %}
+
+<link href="{% static 'pong/css/add_friend.css' %}" rel="stylesheet">
+
+
+<h1 class="title">ADD FRIEND</h1>
+
+    <section>
+    <div class="add_friend">
+            <h1>Type New Friend's Pseudo</h1>
+            <form action="{% url 'add_friends' %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="friend_pseudo" placeholder="Pseudo">
+                <input class="validated_button" type="submit" value="Confirmed">
+            </form>
+        </div>
+        <div class="users_list">
+            <h4>Find new Friends</h4>
+            {% if users_list %}
+                <ul>
+                {% for users in users_list %}
+                    <li>{{ users.pseudo }}</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>NO USERS AVAILABLE</p>
+            {% endif %}
+        </div>
+    </section>
+
+<div class="message">
+    {% if error_message.value %}
+        <p>{{error_message.message}}</p>
+    {% endif %}
+</div>

@@ -1,0 +1,44 @@
+{% load static %}
+<link href="{% static 'pong/css/del_friends.css' %}" rel="stylesheet">
+{% if error_message.value %}
+    <p>{{error_message.message}}</p>
+{% endif %} 
+<h1 class="title">DEL FRIEND</h1>
+<section>
+    {% if error_message.value %}
+        <p>{{error_message.message}}</p>
+    {% endif %}
+    <div class="add_friend">
+        <h1>Type Friend's Pseudo</h1>
+        <form action="{% url 'delete_friends' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="friend_pseudo" placeholder="pseudo">
+            <input type="submit" value="confirmed">
+        </form>
+    </div>
+    <div class="users_list">
+        <h4>FRIEND LIST</h4>
+        {% if user_friend %}
+            <ul>
+            {% for users in user_friend %}
+                <li>{{ users.pseudo }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>FRIEND LIST EMPTY</p>
+        {% endif %}
+    </div>
+</section>
+
+
+
+
+<!-- {% if error_message.value %}
+    <p>{{error_message.message}}</p>
+{% endif %} 
+<h1>Type the pseudo of your friend</h1>
+<form action="{% url 'delete_friends' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="friend_pseudo" placeholder="pseudo">
+    <input type="submit" value="confirmed">
+</form> -->

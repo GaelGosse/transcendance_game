@@ -1,0 +1,13 @@
+   	{% load static %}
+    {% block css%}
+    <link href="{% static 'pong/css/style_index.css' %}" rel="stylesheet">
+    {% endblock css %}
+	<body class="body_index">
+		<div class="container-fluid fixed_header">
+			<h1 class="text-center title_index p-5">PONG</h1>
+		</div>
+		<div class="container-fluid index_page_text">
+			<a class="index_page_links_login" href="{% url 'signin' %}" alt="SIGN IN">LOG IN</a>
+			<a class="index_page_links_signup" href="{% url 'signup' %}" alt="SIGN IN">SIGN UP</a>
+		</div>
+	</body>

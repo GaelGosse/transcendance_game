@@ -1,0 +1,233 @@
+{% load static %}
+
+
+
+<div class="stats">
+	<!-- <div class="score_board">
+		<span>4</span>
+	</div> -->
+	<div class="tableaux">
+		<section class="left_board">
+			<h1>YOUR STATS</h1>
+			<ul>
+				{% if statistics %}
+					<h3>Game Won</h3>
+					<li>{{ statistics.nbr_won_parties }}</li>
+
+					<h3>Game Lost</h3>
+					<li>{{ statistics.nbr_lose_parties }}</li>
+
+					<h3>Time played</h3>
+					<li>{{ statistics.total_time_played }}</li>
+
+					<h3>Won Tournament</h3>
+					<li>{{ statistics.nbr_won_tournaments }}</li>
+				{% else %}
+					<h3>Game Won</h3>
+					<li>0</li>
+
+					<h3>Game Lost</h3>
+					<li>0</li>
+
+					<h3>Time played</h3>
+					<li>0</li>
+
+					<h3>Won Tournament</h3>
+					<li>0</li>
+				{% endif %}
+			</ul>
+		</section>
+		<section class="right_board">
+			<div class="table-container">
+				<h1>HISTORY</h1>
+				<!-- <ul>
+					<li>Match 1</li>
+				</ul> -->
+				<table>
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Opponent</th>
+							<th>Result</th>
+							<!-- <th>Game Duration</th> -->
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="tbody-container">
+				<table>
+					<tbody>
+						{% for game in history %}
+							{% if game.winner.pseudo == user.pseudo %}
+								<tr>
+									<td class="victory">{{game.date}}</td>
+									<td class="victory">{{game.loser}}</td>
+									<td class="victory">Victory</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td class="defeat">{{game.date}}</td>
+									<td class="defeat">{{game.winner}}</td>
+									<td class="defeat">Defeat</td>
+								</tr>
+							{% endif %}
+						{% empty %}
+							<tr class="empty">
+								<td colspan="3" class="empty-cell">No match played yet</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+	<h1 class="second-title">GRAPHS</h1>
+	<div class="graph">
+		<div class="chart-container">
+			<canvas id="myChart" width="600" height="300"></canvas>
+		</div>
+		<div class="chart-container">
+			<canvas id="myChart2" width="600" height="300"></canvas>
+		</div>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script>
+		var gameDates = JSON.parse('{{ game_dates_json|escapejs }}');
+		var gameResults = JSON.parse('{{ game_results_json|escapejs }}');
+
+		var ctx = document.getElementById('myChart').getContext('2d');
+
+		var data = {
+		  labels: gameDates,
+		  datasets: [{
+			label: 'Game Results',
+			data: gameResults,
+			backgroundColor: gameResults.map(result => result === 1 ? 'rgba(75, 192, 192, 0.2)' : 'rgba(255, 99, 132, 0.2)'),
+			borderColor: gameResults.map(result => result === 1 ? '#ffbd59' : 'rgba(206, 86, 86, 1)'),
+			borderWidth: 1,
+			fill: false // Remplissage sous la ligne
+		  }]
+		};
+
+		var myChart = new Chart(ctx, {
+		  type: 'line', // Changez le type de graphique ici
+		  data: data,
+		  options: {
+			scales: {
+			  x: {
+				ticks: {
+				  font: {
+					size: 12,
+					family: 'Arial',
+					weight: 'bold'
+				  },
+				  color: '#ff914d',
+				},
+				grid: {
+				  color: function(context) {
+					return context.tick.value === 0 ? 'rgba(255, 255, 255, 0.75)' : 'rgba(255, 255, 255, 0.75)';
+				  },
+				  lineWidth: function(context) {
+					return context.tick.value === 0 ? 2 : 1;
+				  },
+				}
+			  },
+			  y: {
+				beginAtZero: true,
+				min: -2,
+				max: 2,
+				ticks: {
+				  stepSize: 1,
+				  color: function(context) {
+					return context.tick.value === 1 ? '#288c85' : context.tick.value === -1 ? 'rgba(206, 86, 86, 0.768)' : 'rgba(206, 86, 86, 0.768)';
+				  },
+				  font: {
+					size: 15,
+					family: 'Arial',
+					weight: 'bold'
+				  },
+				  callback: function(value) {
+					if (value === 1) return 'Victory';
+					if (value === -1) return 'Defeat';
+					return '';
+				  }
+				},
+				grid: {
+				  color: function(context) {
+					return context.tick.value === 0 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.5)';
+				  },
+				  lineWidth: function(context) {
+					return context.tick.value === 0 ? 2 : 1;
+				  },
+				}
+			  }
+			}
+		  }
+		});
+	</script>
+	<script>
+		var game_duration = JSON.parse('{{ game_duration_json|escapejs }}');
+
+		console.log(game_duration);
+
+		var dates = [];
+		var durations = [];
+
+		for(const [date, duration] of Object.entries(game_duration))
+		{
+			console.log(`Date: ${date}, duration: ${duration} seconds`)
+			dates.push(date);
+			durations.push(duration);
+		}
+
+		console.log("Dates :", dates);
+		console.log("Durations :", durations);
+
+		var ctx = document.getElementById('myChart2').getContext('2d');
+
+		var data = {
+			labels : dates,
+			datasets: [{
+				label: 'Time played (sec)',
+				data: durations,
+				backgroundColor: '#ff914d',
+				borderColor: '#ff914d',
+				barThickness: 20,
+			}]
+		};
+
+		var myChart = new Chart(ctx, {
+			type : 'bar',
+			data: data,
+			options: {
+				scales: {
+					x: {
+						ticks: {
+							font: {
+								size: 12,
+								family: 'Arial',
+								weight: 'bold'
+							},
+							color: '#ff914d',
+						},
+					},
+					y: {
+						beginAtZero: true,
+						ticks: {
+							stepSize: 1,
+							font: {
+								size: 15,
+								family: 'Arial',
+								weight: 'bold'
+							}
+						},
+						grid: {
+							color : 'rgba(255, 255, 255, 1)',
+						},
+					},
+				}
+			},
+		});
+	</script>

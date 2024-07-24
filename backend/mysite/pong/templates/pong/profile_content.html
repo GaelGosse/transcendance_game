@@ -1,0 +1,345 @@
+{% load static %}
+
+ <link href="{% static 'pong/css/profil.css' %}" rel="stylesheet">
+
+ <h1>Profil</h1>
+ <div class="header_page">
+			<a href="{% url 'statistics' %}">STATS</a>
+			<!-- <a href="/logout">Logout</a> -->
+	</div>
+ </div>
+ <div class="body_page">
+	 <section class="left_side">
+		 <div class="infos">
+			 <div>
+				 {% if user_info.user_avatar %}
+					 <img class="img_limit" src="{{ user_info.user_avatar }}" alt="Avatar" />
+				 {% else %}
+					 <img class="img_limit" src="{% static 'pong/image/profil_default.png' %}" alt="Default Avatar" />
+				 {% endif %}
+			 </div>
+			 <div class="infos_pseudo_email">
+				 <h1>Email</h1>
+				 <p>{{ user_info.user_email}}</p>
+				 {% if other_error.email %}
+					 <p>{{other_error.email}}</p>
+				 {% endif %}
+				 <h1>Pseudo</h1>
+				 <p>{{ user_info.user_pseudo}}</p>
+				 {% if other_error.pseudo %}
+					 <p> {{other_error.pseudo}}</p>
+				 {% endif %}
+			 </div>
+		 </div>
+		 <div class="change">
+			 <div class="change_big">
+				 <label for="avatar">Change your avatar</label>
+				 <div class="change_little">
+					 <form action="{% url 'profile' %}" method="post"  type="file" enctype="multipart/form-data">
+						 {% csrf_token %}
+						 <input class="form_left" id="avatar" type="file" name="change_avatar" style="height: 36px;">
+						 <input class="form_right" type="submit" value="Modify">
+					 </form>
+				 </div>
+			 </div>
+			 <div class="change_big">
+				 <label for="email">Change your email</label>
+				 <div class="change_little">
+					 <form action="{% url 'profile' %}" method="post" >
+						 {% csrf_token %}
+						 <input class="form_left" type="text" name="change_email" placeholder="Email">
+						 <input class="form_right" type="submit" value="Modify">
+					 </form>
+				 </div>
+			 </div>
+			 <div class="change_big">
+				 <label for="email">Change your pseudo</label>
+				 <div class="change_little">
+					 <form action="{% url 'profile' %}" method="post" >
+						 {% csrf_token %}
+						 <input class="form_left" type="text" name="change_pseudo" placeholder="Pseudo">
+						 <input class="form_right" type="submit" value="Modify">
+					 </form>
+				 </div>
+			 </div>
+			 <div class="form_password">
+				 <!-- <div class="change_little"> -->
+					 <form method="POST" enctype="multipart/form-data">
+						 {% csrf_token %}
+						 <div>
+							 <label for="old_password">Old Password:</label>
+							 <input style="width: 80%; padding: 1% 3%;" type="password" name="old_password" id="old_password">
+						 </div>
+						 <div>
+							 <label for="new_password1">New Password:</label>
+							 <input style="width: 80%; padding: 1% 3%;" type="password" name="new_password1" id="new_password1">
+						 </div>
+						 <div>
+							 <label for="new_password2">Confirm Password:</label>
+							 <input style="width: 80%; padding: 1% 3%;" type="password" name="new_password2" id="new_password2">
+						 </div>
+						 {% if password_form_errors %}
+							 <div class="error">
+								 <ul>
+									 {% for error in password_form_errors %}
+										 <li style="color: red;">{{ error }}</li>
+									 {% endfor %}
+								 </ul>
+							 </div>
+						 {% endif %}
+						 <button class="button_password" type="submit" name="change_password">Change Password</button>
+					 </form>
+				 <!-- </div>  -->
+			 </div>
+		 </div>
+	 </section>
+	 <section class="right_side">
+		 <form action="{% url 'profile' %}" method="post">
+			 {% csrf_token %}
+			 <fieldset>
+				 <legend class="FA_title">2FA</legend>
+				 {% if user_info.user_choice %}
+					 <div class="action_enable_disabled">
+						 <p class="enabled_status">Status : Enabled</p>
+						 <input style="display: none" type="checkbox" name="options" value="disabled">
+						 <input type="submit" value="Disabled">
+					 </div>
+				 {% else %}
+					 <div class="action_enable_disabled">
+						 <p class="disabled_status">Status : Disabled</p>
+						 <input style="display: none;" type="checkbox" name="options" value="enabled">
+						 <input type="submit" value="Enabled">
+					 </div>
+					 {% endif %}
+			 </fieldset>
+		 </form>
+		 {% if user_info.user_choice %}
+			 <p class="text-center w-50 h5">Scan this QR code in your authentificator app</p>
+			 <img src="data:image/png;base64,{{ user_info.user_url|safe }}" alt="QR Code">
+		 {% endif %}
+	 </section>
+	 <section class="bot_side">
+			 <div class="friends_header">
+				<h1>Friends</h1>
+				<div class="link_friends">
+					<a class="add_friends" href="{% url 'add_friends' %}">ADD FRIENDS</a>
+					<a class="del_friends" href="{% url 'delete_friends' %}">DEL FRIENDS</a>
+				</div>
+			</div>
+			 <div class="friend_list">
+				{% if user_info.user_friends %}
+					<ul>
+						<!-- {% if user_info %}
+							<p>User Info: {{ user_info }}</p>
+						{% endif %} -->
+						{% for friend in user_info.user_friends %}
+							{% if friend.is_active %}
+								<li data-is_active={{ friend.is_active }}>
+									{{ friend.pseudo }}
+									<!-- <form action="{}" method="post" style="display: inline;">
+										{% csrf_token %}
+										<input type="hidden" name="user_info" value="{{user_info}}">
+										<input type="submit" value="Delete">
+									</form> -->
+								</li>
+							{% else %}
+								<li>
+									{{ friend.pseudo }}
+									<!-- <form action="{}" method="post" style="display: inline;">
+										{% csrf_token %}
+										<input type="hidden" name="user_info" value="{{user_info}}">
+										<input type="submit" value="Delete">
+									</form> -->
+								</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+					<!-- <a href="{% url 'delete_friends' %}">delete a friend </a> -->
+			</div>
+			{% else %}
+				<p class="no_friends">NO FRIENDS YET</p>
+			{% endif %}
+	 </section>
+ </div>
+ <!-- <div>
+
+ </div> -->
+
+<script>
+	console.log("J'aime les fraises");
+	var submit = document.querySelector('.right_side input[type="submit"]');
+	submit.addEventListener('click', (e) => {
+		e.preventDefault();
+		e.target.form.querySelector('input[type="checkbox"]').checked = true;
+		e.target.form.submit();
+		console.log(e.target.form);
+	})
+	// var friends = Array.from(document.querySelectorAll('friend_list li'));
+	// friends.forEach((li) => {
+	// 	if (!li.data-is_active)
+	// 	{
+
+	// 	}
+	// })
+</script>
+
+
+
+
+
+
+<!-- {% load static %}
+
+{% block css %}<link href="{% static 'pong/css/profil.css' %}" rel="stylesheet">{% endblock %}
+
+
+<section class="left_side">
+    <h1>Your Profil</h1>
+    <div class="avatar">
+        <h2>Avatar</h2>
+        {% if user_info.user_avatar %}
+            <img src="{{ user_info.user_avatar }}" alt="Avatar" />
+        {% else %}
+            <img src="{% static 'pong/image/profil_default.png' %}" alt="Default Avatar" />
+        {% endif %}
+    </div>
+</section>
+
+<section class="right_side">
+    <form action="{% url 'profile' %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <h1> {{user_info.user_pseudo}} right now you have chose to : </h1>
+            {% if user_info.user_choice %}
+                <p>enable 2FA </p>
+            {% else %}
+                <p>disable 2FA</p>
+            {% endif %}
+        <legend> chose if you want to enable or disable 2FA :  </legend>
+
+                <label for="option1">enabled</label>
+                <input type="checkbox" name="options" value="enabled">
+
+                <label for="option2">disabled</label>
+                <input type="checkbox" name="options" value="disabled">
+        </fieldset>
+        <input type="submit" value="Submit">
+    </form>
+    {% if user_info.user_choice %}
+        <p>scan this QR code in your authentificator app to sync in, at your next connexion you will use your authentificator in order to login</p>
+        <img src="data:image/png;base64,{{ user_info.user_url|safe }}" alt="QR Code">
+    {% endif %}
+
+<hr>
+<hr>
+<div>
+    <a href="{% url 'add_friends' %}">add friends </a>
+</div>
+
+    <div>
+        <h1>your friends are : </h1>
+        {% if user_info.user_friends %}
+            <ul>
+                {% for friend in user_info.user_friends %}
+                    <li>{{ friend.pseudo }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'delete_friends' %}">delete a friend </a>
+        {% else %}
+            <p>you have no friends yet.</p>
+        {% endif %}
+    </div>
+    <a href="/logout">logout</a>
+
+</section>
+
+
+<hr>
+<hr>
+<div>
+    <h1>your friends are : </h1>
+    {% if user_info.user_friends %}
+        <ul>
+            {% for friend in user_info.user_friends %}
+                <li>{{ friend.pseudo }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'delete_friends' %}">delete a friend </a>
+    {% else %}
+        <p>you have no friends yet.</p>
+    {% endif %}
+</div>
+<hr>
+<hr>
+<a href="/logout">logout</a>
+
+<hr>
+<hr>
+
+	<form action="{% url 'profile' %}" method="post" >
+		{% csrf_token %}
+
+		<label for="email">Your email is {{ user_info.user_email}}, change your email </label>
+		<input type="text" name="change_email" placeholder="Email">
+
+        <input type="submit" value="modify">
+    </form>
+    {% if other_error.email %}
+        <p> {{other_error.email}}</p>
+    {% endif %}
+    <hr>
+    <hr>
+    <form action="{% url 'profile' %}" method="post" >
+		{% csrf_token %}
+		<label for="pseudo">Your pseudo is {{ user_info.user_pseudo}}, change your pseudo</label>
+		<input type="text" name="change_pseudo" placeholder="Pseudo">
+
+        <input type="submit" value="modify">
+    </form>
+    {% if other_error.pseudo %}
+        <p> {{other_error.pseudo}}</p>
+    {% endif %}
+
+
+
+    <hr>
+    <hr>
+    <hr>
+    <form action="{% url 'profile' %}" method="post"  type="file" enctype="multipart/form-data">
+		{% csrf_token %}
+		<label for="avatar" class="avatar">Change your avatar</label>
+		<input id="avatar" type="file" name="change_avatar">
+
+        <input type="submit" value="modify">
+	</form>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h2>Change Password</h2>
+        <div>
+            <label for="old_password">Old Password:</label>
+            <input type="password" name="old_password" id="old_password">
+        </div>
+        <div>
+            <label for="new_password1">New Password:</label>
+            <input type="password" name="new_password1" id="new_password1">
+        </div>
+        <div>
+            <label for="new_password2">Confirm New Password:</label>
+            <input type="password" name="new_password2" id="new_password2">
+        </div>
+        {% if password_form_errors %}
+            <div class="error">
+                <ul>
+                    {% for error in password_form_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <button type="submit" name="change_password">Change Password</button>
+
+    </form>
+    <hr>
+ -->

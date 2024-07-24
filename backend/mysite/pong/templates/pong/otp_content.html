@@ -1,0 +1,43 @@
+{% load static %}
+
+{% block css %}<link href="{% static 'pong/css/otp.css' %}" rel="stylesheet">{% endblock css %}
+
+{% block content %}
+    {% if error_message.value %}
+        <p>{{error_message.message}}</p>
+    {% endif %} 
+    
+    <section>
+        <h1>OTP</h1>
+        <img class="img_otp" src="{% static 'pong/image/bouclier.png' %}">
+        <h3>Please insert your 6 numbers code</h3>
+        <form action="{% url 'otp' %}" method="post" id="otp-form">
+            {% csrf_token %}
+            <div id="otp-inputs">
+                <input type="text" name="otp_0" maxlength="1" pattern="[0-9]" required>
+                <input type="text" name="otp_1" maxlength="1" pattern="[0-9]" required>
+                <input type="text" name="otp_2" maxlength="1" pattern="[0-9]" required>
+                <input type="text" name="otp_3" maxlength="1" pattern="[0-9]" required>
+                <input type="text" name="otp_4" maxlength="1" pattern="[0-9]" required>
+                <input type="text" name="otp_5" maxlength="1" pattern="[0-9]" required>
+            </div>
+            <!-- <input class="code" type="text" name="otp" placeholder="Code..."> -->
+            <input class="submit" type="submit" value="Submit">
+        </form>
+    </section>
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputs = document.querySelectorAll('#otp-inputs input');
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', () => {
+                    if (input.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

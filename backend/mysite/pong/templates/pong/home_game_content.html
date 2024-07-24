@@ -1,0 +1,132 @@
+
+{% load static %}
+
+	<style>
+		main
+		{
+			color: white;
+		}
+		main > h1
+		{
+			text-align: center;
+			margin: 50px auto ;
+			text-shadow: 0 0 5px rgba(0,0,0, 5);
+		}
+		section
+		{
+			/* background: rgba(0,0,0,0.5); */
+
+			max-width: 1200px;
+			margin: 50px auto 0;
+
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			flex-direction: row;
+		}
+		section article
+		{
+			width: 45%;
+		}
+		section a,
+		section form
+		{
+			background: rgba(0,0,0,0.5);
+			box-shadow: inset 0 0 20px 0.1em #000;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: row;
+
+			width: 100%;
+
+			margin: 5% 0 ;
+			padding: 2% 0 ;
+
+			color: white;
+			text-decoration: none;
+			text-align: center;
+			font-size: 35px;
+		}
+		aside form
+		{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+		}
+		aside form input
+		{
+			margin: 1% auto;
+		}
+		section a:not(.small)
+		{
+			height: 30vh;
+		}
+		aside input
+		{
+			padding: 0.5% 2%;
+		}
+		section article > a:hover
+		{
+			transform: scale(1.1);
+		}
+		section article > a:active
+		{
+			transform: scale(0.9);
+		}
+		/* aside:has(input[type="submit"]:hover)
+		{
+			transform: scale(1.1);
+		}
+		aside:has(input[type="submit"]:active)
+		{
+			transform: scale(0.9);
+		} */
+		aside input[type="submit"]:hover
+		{
+			transform: scale(1.15);
+		}
+		aside input[type="submit"]:active
+		{
+			transform: scale(0.9);
+		}
+		section .small
+		{
+			font-size: 20px;
+		}
+	</style>
+
+	<h1>Choose a game</h1>
+
+	<section>
+		<article>
+			<a href="/tictactoe">Tic Tac Toe</a>
+			<a href="#" class="small">5x5</a>
+		</article>
+		<article>
+			<a href="/waiting_pong">Pong</a>
+			<a href="#" class="small">High speed version</a>
+			<aside>
+				<form class="small" action="/tournament/" method="post">
+					Tournament
+					{% csrf_token %}
+					<input type="text" name="alias" placeholder="your alias">
+					<input type="submit" value="Enter">
+				</form>
+			</aside>
+		</article>
+	</section>
+
+	<script>
+	window.onload = function() {
+		var message = "{{ message }}";
+		console.log("message: ", message);
+		var status = document.getElementById("status");
+		if (status)
+			status.innerHTML = message;
+	}
+	</script>
+
+

@@ -1,0 +1,35 @@
+{% load static %}
+<style>
+h1
+{
+	width: max-content;
+	margin: 1% auto;
+	display: block;
+	color: white;
+}
+</style>
+
+<h1 id="status">Waiting for players...</h1>
+{% csrf_token %}
+<script type="text/javascript">
+	window.onload = function() {
+		var message = "{{ message }}";
+		console.log("message: ", message);
+		var status = document.getElementById("status");
+		if (status)
+			status.innerHTML = message;
+		var check_tournament_interval = setInterval(() => {
+			$.ajax({
+				url: '/check_tournament_match/',
+				success: function(data) {
+					console.log(data);
+					if (data.tournament_found)
+					{
+						if (document.getElementById("status"))
+							document.getElementById("status").innerHTML = "Tournament started !"
+					}
+				}
+			})
+		}, 2000);
+	}
+</script>

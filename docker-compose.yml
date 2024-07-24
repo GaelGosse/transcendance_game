@@ -32,16 +32,25 @@ services:
     restart: on-failure
     env_file: .env
 
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./certs:/etc/nginx/certs
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - transcendance
+    restart: on-failure
+
 volumes:
  db_data:
     driver: local
-
- backend_data:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: /home/gael/Desktop/data/backend
 
 networks:
   transcendance:

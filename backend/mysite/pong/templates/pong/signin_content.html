@@ -1,0 +1,28 @@
+    {% load static %}
+    {% block css%}
+    <link href="{% static 'pong/css/signup.css' %}" rel="stylesheet">
+    {% endblock css %}
+
+    <h1 class="text-center">Pong</h1>
+    <section class="login">
+        <form action="{% url 'signin' %}" method="post">
+            {% csrf_token %}
+        
+            <label for="email">email</label>
+            <input type="text" name="email" placeholder="Email">
+        
+        
+            <label for="password">password</label>
+            <input type="password" name="password" placeholder="Password">
+        
+            <input type="submit" value="Log In">
+        </form>
+	    <p>New ?<br>Sign up <a href="/signup">here</a></p>
+
+    
+    </section>
+
+    {% if error_message %}
+            <p> {{message}}</p>
+    {% endif %}
+

@@ -1,0 +1,14 @@
+<main id="app">
+	{% block content %}
+	{% load static %}
+	{% block css %}<link href="{% static 'pong/css/homepage.css' %}" rel="stylesheet">{% endblock css %}
+	<a id="logout-button" href="/logout">logout</a>
+	<div class="animated_text text-center" id="animatedText">
+		Welcome to the <a href="#" alt="Game">Pong</a> game !<br>
+		Here are the funniest experience you ever had !<br>
+		Play you platform on the <span class="blue">blue</span> or <span class="red">red</span> side and beat your opponent !<br>
+		Pong is an easy game that you can play without any experience !<br>
+		Play against players around the world or invite your friends for more fun !
+	</div>
+	{% endblock %}
+</main>

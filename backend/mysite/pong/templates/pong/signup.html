@@ -2,38 +2,7 @@
 
 {% load static %}
 
-{% block title %}Pong - Sign up{% endblock %}
-
 {% block css%}<link href="{% static 'pong/css/signup.css' %}" rel="stylesheet">{% endblock css %}
-
-
 {% block content %}
-
-<h1 class="text-center">CREATE YOUR ACCOUNT</h1>
-
-<section>
-	<form action="{% url 'signup' %}" method="post"  type="file" enctype="multipart/form-data" name="avatar">
-		{% csrf_token %}
-		
-		<label for="email">email</label>
-		<input type="text" name="email" placeholder="Email">
-
-		<label for="password">password</label>
-		<input type="password" name="password" placeholder="Password">
-
-		<label for="confirm_password">confirm password</label>
-		<input type="password" name="confirm_password" placeholder="Confirm_Password">
-
-		<label for="pseudo">pseudo</label>
-		<input type="text" name="pseudo" placeholder="Pseudo">
-
-		<label for="avatar" class="avatar">Select avatar</label>
-		<input id="avatar" style="visibility:hidden;" type="file" name="avatar">
-		
-		<input type="submit" value="SIGN UP">
-	</form>
-	
-	<p>Already registered ?<br>Log in <a href="/signin">here</a></p>
-</section>
-
+	{% include 'pong/signup_content.html' %}
 {% endblock %}

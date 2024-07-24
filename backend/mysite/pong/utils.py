@@ -1,6 +1,16 @@
 import pyotp
 from datetime import datetime, timedelta
 from .models import NewUser, Tournament, Party, Chat, Message, Statistic, Participant, Friendship, BlockedUser
+from django import forms
+
+#class CustomPasswordChangeForm(PasswordChangeForm):
+#    old_password = forms.CharField(widget=forms.PasswordInput, label="Old Password")
+#    new_password1 = forms.CharField(widget=forms.PasswordInput, label="New Password")
+#    new_password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm New Password")
+
+#    class Meta:
+#        model = User
+#        fields = ('old_password', 'new_password1', 'new_password2')
 
 def get_friends(user):
     # Get friends where the user is either person1 or person2

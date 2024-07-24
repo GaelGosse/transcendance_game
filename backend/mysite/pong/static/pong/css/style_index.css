@@ -1,3 +1,9 @@
+header
+{
+    display: none;
+}
+
+
 .title_index{
 	color: #288c85;
 	/* font-family: "HK Modular", sans-serif; */
@@ -115,6 +121,7 @@
     display: flex;
     justify-content: center;
     align-content: center;
+    flex-direction: column;
     /* background-attachment: fixed; */
 }
 
