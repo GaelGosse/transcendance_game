@@ -257,7 +257,7 @@ function send_score_quit(id_party) {
 	if (id_party)
 	{
 		$.ajax({
-			url: '/scoring/' + id_party + '/',
+			url: '/scoring_pong/' + id_party + '/',
 			type: 'POST',
 			async: false,
 			beforeSend: function(xhr) {
@@ -297,7 +297,7 @@ function loadContent(path, addToHistory) {
 	// console.log("addTohistory = ", addToHistory);
 	console.log('Loading content from:', path);
 	var i_clear_interval = -1;
-	while (++i_clear_interval < 1000)
+	while (++i_clear_interval < 2000)
 		clearInterval(i_clear_interval);
 
 	if (customHistory.length > 1
@@ -306,7 +306,14 @@ function loadContent(path, addToHistory) {
 		var id_party = customHistory[customHistory.length - 1].match(/\/pong_page\/(\d+)\//)
 		if (id_party)
 			id_party = id_party[1];
-		console.log("last id party: ", id_party);
+		send_score_quit(id_party);
+	}
+	if (customHistory.length > 1
+	&& customHistory[customHistory.length - 1].indexOf('tic') != -1)
+	{
+		var id_party = customHistory[customHistory.length - 1].match(/\/tic\/(\d+)\//)
+		if (id_party)
+			id_party = id_party[1];
 		send_score_quit(id_party);
 	}
 
@@ -324,11 +331,12 @@ function loadContent(path, addToHistory) {
 				document.getElementById('app').innerHTML = data.html;
 				script_array = Array.from(document.getElementById('app').querySelectorAll("script"));
 				script_array.forEach((script) => {
+					console.log("script: ", script);
 					var new_script = document.createElement('script');
 					new_script.innerHTML = script.textContent;
-					for (var attr of script.attributes) {
-						new_script.setAttribute(attr.name, attr.value);
-					}
+					// for (var attr of script.attributes) {
+					// 	new_script.setAttribute(attr.name, attr.value);
+					// }
 					script.remove();
 					document.getElementById('app').appendChild(new_script);
 				})
@@ -358,7 +366,21 @@ function loadContent(path, addToHistory) {
 				&& customHistory[customHistory.length - 2].indexOf('waiting_pong') != -1)
 				{
 					$.ajax({
-						url: '/stop_waiting/',
+						url: '/stop_waiting_pong/',
+						type: 'POST',
+						async: false,
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("X-CSRFToken", csrftoken);
+						},
+						success: function() {}
+					});
+				}
+				if (customHistory.length > 2
+				&& customHistory[customHistory.length - 1].indexOf('tic') == -1
+				&& customHistory[customHistory.length - 2].indexOf('waiting_tic') != -1)
+				{
+					$.ajax({
+						url: '/stop_waiting_tic/',
 						type: 'POST',
 						async: false,
 						beforeSend: function(xhr) {

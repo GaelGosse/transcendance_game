@@ -1424,3 +1424,53 @@ DEBUG 2024-07-24 18:01:52,007 views W2: lala
 DEBUG 2024-07-24 18:01:52,023 views ared: a
 DEBUG 2024-07-24 18:01:52,024 views ablue: d
 INFO 2024-07-24 18:02:04,196 views -- -fin- --
+DEBUG 2024-07-26 09:24:13,441 views html in sigin =     
+    
+    <link href="/static/pong/css/signup.css" rel="stylesheet">
+    
+
+    <h1 class="text-center">Pong</h1>
+    <section class="login">
+        <form action="/signin" method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="1Ce8higcaoCmTiExRqOOcSJnUFnYJTpyg6vga8EWaGFs2JGL5YZSZZH7tU11PJLH">
+        
+            <label for="email">email</label>
+            <input type="text" name="email" placeholder="Email">
+        
+        
+            <label for="password">password</label>
+            <input type="password" name="password" placeholder="Password">
+        
+            <input type="submit" value="Log In">
+        </form>
+	    <p>New ?<br>Sign up <a href="/signup">here</a></p>
+
+    
+    </section>
+
+    
+
+
+DEBUG 2024-07-26 09:30:47,933 views tournament.participant1 admin: 
+DEBUG 2024-07-26 09:30:47,934 views tournament.participant2 None: 
+DEBUG 2024-07-26 09:30:47,935 views tournament.participant3 None: 
+DEBUG 2024-07-26 09:30:47,935 views tournament.participant4 None: 
+INFO 2024-07-26 09:30:47,936 views ---------------
+DEBUG 2024-07-26 09:30:53,247 views tournament.participant1 admin: 
+DEBUG 2024-07-26 09:30:53,249 views tournament.participant2 xyz: 
+DEBUG 2024-07-26 09:30:53,249 views tournament.participant3 None: 
+DEBUG 2024-07-26 09:30:53,250 views tournament.participant4 None: 
+INFO 2024-07-26 09:30:53,250 views ---------------
+DEBUG 2024-07-26 09:30:59,711 views tournament.participant1 admin: 
+DEBUG 2024-07-26 09:30:59,713 views tournament.participant2 xyz: 
+DEBUG 2024-07-26 09:30:59,715 views tournament.participant3 pedro: 
+DEBUG 2024-07-26 09:30:59,715 views tournament.participant4 None: 
+INFO 2024-07-26 09:30:59,715 views ---------------
+INFO 2024-07-26 09:33:22,366 views party2
+DEBUG 2024-07-26 09:33:22,383 views ared: drake
+DEBUG 2024-07-26 09:33:22,383 views ablue: moi
+DEBUG 2024-07-26 09:33:43,498 views W1: xyz
+DEBUG 2024-07-26 09:33:43,500 views W2: lala
+DEBUG 2024-07-26 09:33:43,517 views ared: will smith
+DEBUG 2024-07-26 09:33:43,517 views ablue: moi
+INFO 2024-07-26 09:34:06,736 views -- -fin- --

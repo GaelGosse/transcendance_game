@@ -1,0 +1,459 @@
+{% load static %}
+
+<style>
+	main
+	{
+		font-family: monospace;
+		/* background: black; */
+
+		width: 100%;
+		height: calc(100vh - 90px);
+
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		flex-direction: column;
+	}
+	article
+	{
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		flex-direction: row;
+
+		height: max-content;
+		width: 200px;
+	}
+	article p
+	{
+		background: #0008;
+		margin: 3% 6%;
+		padding: 3% 6%;
+	}
+	article span
+	{
+		color: white;
+	}
+	.popup
+	{
+		position: absolute;
+		top: 50%;
+		left: 0%;
+		transform: translate(0%, -50%);
+	}
+	table
+	{
+		width: 600px;
+		height: 600px;
+
+		background: #0008;
+	}
+	table,
+	tr,
+	td
+	{
+		border: solid 2px white;
+	}
+	tr
+	{
+		width: 600px;
+		height: 200px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: row;
+	}
+	td
+	{
+		width: 200px;
+		height: 200px;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: row;
+	}
+	td:hover
+	{
+		cursor: pointer;
+	}
+	div
+	{
+		width: 150px;
+		height: 150px;
+	}
+	.cross
+	{
+		position: relative;
+	}
+	.cross::after,
+	.cross::before
+	{
+		content: '';
+		display: block;
+
+		height: 150px;
+		width: 30px;
+
+		background: #F04;
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) rotate(-45deg);
+
+		box-shadow: 0 0 10px black;
+	}
+	.cross::after
+	{
+		transform: translate(-50%, -50%) rotate(-45deg);
+	}
+	.cross::before
+	{
+		transform: translate(-50%, -50%) rotate(45deg);
+	}
+	.cross2
+	{
+		position: relative;
+	}
+	.cross2::after,
+	.cross2::before
+	{
+		content: '';
+		display: block;
+
+		height: 150px;
+		width: 30px;
+
+		background: #ff914d;
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) rotate(-45deg);
+
+		box-shadow: 0 0 10px black;
+	}
+	.cross2::after
+	{
+		transform: translate(-50%, -50%) rotate(-45deg);
+	}
+	.cross2::before
+	{
+		transform: translate(-50%, -50%) rotate(45deg);
+	}
+	.circle
+	{
+		background: transparent;
+
+		border-radius: 500px;
+		border: solid #09F 30px;
+
+		box-shadow: 0 0 10px black;
+	}
+	.circle2
+	{
+		background: transparent;
+
+		border-radius: 500px;
+		border: solid #7900ff 30px;
+
+		box-shadow: 0 0 10px black;
+	}
+	@keyframes blue_win
+	{
+		0%{
+			background: #FFF !important;
+		}
+		100%{
+			background: #09F !important;
+		}
+	}
+	@keyframes red_win
+	{
+		0%{
+			background: #FFF !important;
+		}
+		100%{
+			background: #F04 !important;
+		}
+	}
+	@keyframes blue_win2
+	{
+		0%{
+			background: #FFF !important;
+		}
+		100%{
+			background: #7900ff !important;
+		}
+	}
+	@keyframes red_win2
+	{
+		0%{
+			background: #FFF !important;
+		}
+		100%{
+			background: #ff914d !important;
+		}
+	}
+	#win
+	{
+		transition: 1.5s ease;
+		opacity: 0;
+		z-index: 999;
+		background: radial-gradient(#000 20%, #0008 50%, transparent 70%);
+
+		display: none;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+
+		width: 150px;
+		height: 150px;
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.blue_win
+	{
+		animation: blue_win 1s ease;
+		animation-delay: 4s;
+		background: #09F !important;
+	}
+	.red_win
+	{
+		animation: red_win 1s ease;
+		animation-delay: 4s;
+		background: #F04 !important;
+	}
+	.blue_win2
+	{
+		animation: blue_win2 1s ease;
+		animation-delay: 4s;
+		background: #7900ff !important;
+	}
+	.red_win2
+	{
+		animation: red_win2 1s ease;
+		animation-delay: 4s;
+		background: #ff914d !important;
+	}
+</style>
+
+<table>
+	<tr>
+		<td id="0"></td>
+		<td id="1"></td>
+		<td id="2"></td>
+	</tr>
+	<tr>
+		<td id="3"></td>
+		<td id="4"></td>
+		<td id="5"></td>
+	</tr>
+	<tr>
+		<td id="6"></td>
+		<td id="7"></td>
+		<td id="8"></td>
+	</tr>
+</table>
+
+
+<section>
+	<article>
+		<span>
+			Blue start
+		</span>
+	</article>
+	<article>
+		<p class="player_name text-danger" id="red_user"></p>
+		<p class="player_name text-primary" id="blue_user"></p>
+	</article>
+</section>
+<div id="win">
+	<div style="clip-path: polygon(0% 16%, 20% 40%, 30% 0%, 50% 40%, 70% 0%, 80% 40%, 100% 16%, 80% 90%, 20% 90%);"></div>
+</div>
+
+<script>
+// general
+var id_party;
+var red_score = 0;
+var blue_score = 0;
+var user_red = "{{ user_red }}";
+var user_blue = "{{ user_blue }}";
+var start_time = Date.now();
+var end_time = 0;
+
+// tic
+var tic_arr = [null,null,null,null,null,null,null,null,null]
+var turn = 0;
+
+if (user_blue && user_red)
+{
+	document.getElementById('red_user').innerHTML = user_red;
+	document.getElementById('blue_user').innerHTML = user_blue;
+}
+
+function getCookie(name) {
+	var cookieValue = null;
+	if (document.cookie && document.cookie !== '') {
+		var cookies = document.cookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = jQuery.trim(cookies[i]);
+			if (cookie.substring(0, name.length + 1) === (name + '=')) {
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
+			}
+		}
+	}
+	return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+setTimeout(() => {
+	var path = window.location.pathname;
+	id_party = path.match(/\/tic\/(\d+)\//)
+	if (id_party)
+		id_party = id_party[1];
+	console.log("start id party: ", id_party)
+}, 3000);
+function send_score(id_party)
+{
+	if (id_party == -1 || !id_party)
+	{
+		var path = window.location.pathname;
+		var id_party = path.match(/\/tic\/(\d+)\//)
+		if (id_party)
+			id_party = id_party[1];
+	}
+	console.log("send_score: ", id_party, red_score, blue_score);
+	$.ajax({
+		url: '/scoring_tic/' + id_party + '/',
+		type: 'POST',
+		async: false,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		},
+		data: {
+			'red_score': red_score,
+			'blue_score': blue_score,
+			'game_time': end_time - start_time,
+		},
+		success: function() {
+
+		}
+	});
+}
+
+function check_end() {
+	// col
+	if (tic_arr[0] != null && tic_arr[0] == tic_arr[3] && tic_arr[0] == tic_arr[6])
+	{
+		console.log(tic_arr[0], tic_arr[3], tic_arr[6])
+		return tic_arr[0];
+	}
+
+	if (tic_arr[1] != null && tic_arr[1] == tic_arr[4] && tic_arr[1] == tic_arr[7])
+	{
+		console.log(tic_arr[1], tic_arr[4], tic_arr[7])
+		return tic_arr[1];
+	}
+
+	if (tic_arr[2] != null && tic_arr[2] == tic_arr[5] && tic_arr[2] == tic_arr[8])
+	{
+		console.log(tic_arr[2], tic_arr[5], tic_arr[8])
+		return tic_arr[2];
+	}
+
+	// row
+	if (tic_arr[0] != null && tic_arr[0] == tic_arr[1] && tic_arr[0] == tic_arr[2])
+	{
+		console.log(tic_arr[0], tic_arr[1], tic_arr[2])
+		return tic_arr[0];
+	}
+
+	if (tic_arr[3] != null && tic_arr[3] == tic_arr[4] && tic_arr[3] == tic_arr[5])
+	{
+		console.log(tic_arr[3], tic_arr[4], tic_arr[5])
+		return tic_arr[3];
+	}
+
+	if (tic_arr[6] != null && tic_arr[6] == tic_arr[7] && tic_arr[6] == tic_arr[8])
+	{
+		console.log(tic_arr[6], tic_arr[7], tic_arr[8])
+		return tic_arr[6];
+	}
+
+	// diagonal
+	if (tic_arr[2] != null && tic_arr[2] == tic_arr[4] && tic_arr[2] == tic_arr[6])
+	{
+		console.log(tic_arr[2], tic_arr[4], tic_arr[6])
+		return tic_arr[2];
+	}
+
+	if (tic_arr[0] != null && tic_arr[0] == tic_arr[4] && tic_arr[0] == tic_arr[8])
+	{
+		console.log(tic_arr[0], tic_arr[4], tic_arr[8])
+		return tic_arr[0];
+	}
+
+	return null;
+}
+
+function game(e)
+{
+	if (e.target.tagName == "TD" && e.target.parentNode.tagName == "TR")
+	{
+		var div = document.createElement('div')
+		var result;
+		if (turn % 2)
+		{
+			tic_arr[e.target.id] = 1
+			div.classList.add('cross')
+		}
+		else
+		{
+			tic_arr[e.target.id] = 0
+			div.classList.add('circle')
+		}
+		result = check_end();
+		console.log(result)
+		if (result != null)
+		{
+			end_time = Date.now();
+			document.getElementById("win").style.display = "flex";
+			setTimeout(() => {
+				document.getElementById("win").style.height = "600px";
+				document.getElementById("win").style.width = "600px";
+				document.getElementById("win").style.top = "50%";
+				document.getElementById("win").style.opacity = "1";
+				if (result == 1)
+				{
+					document.getElementById("win").firstChild.nextSibling.classList.add('red_win');
+					blue_score = 0;
+					red_score = 1;
+				}
+				else
+				{
+					document.getElementById("win").firstChild.nextSibling.classList.add('blue_win');
+					blue_score = 1;
+					red_score = 0;
+				}
+				send_score(id_party);
+			}, 300);
+		}
+		e.target.appendChild(div)
+		console.log(tic_arr);
+		turn++;
+	}
+
+}
+
+
+document.removeEventListener('click', game);
+document.addEventListener('click', game)
+
+</script>

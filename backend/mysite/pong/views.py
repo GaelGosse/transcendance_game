@@ -1132,6 +1132,7 @@ def delete_friends(request):
 																}, 'user_friend' : user_friend,
 																})
 
+###################### HOME GAME
 def home_game(request):
 	if not request.user.is_authenticated:
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -1146,7 +1147,7 @@ def home_game(request):
 	else:
 		return render(request, "pong/home_game.html", {})
 
-#################################### PONG
+###################### PONG
 def waiting_pong(request):
 	if not request.user.is_authenticated:
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -1156,11 +1157,11 @@ def waiting_pong(request):
 			return HttpResponseRedirect(reverse("login"))
 
 	user = request.user
-	other_user = NewUser.objects.filter(in_waiting_room=True).exclude(id=user.id).first()
+	other_user = NewUser.objects.filter(in_waiting_pong=True).exclude(id=user.id).first()
 	if other_user:
-		party = Party.objects.create(winner=user, loser=other_user, user_red=user, user_blue=other_user, game_name='Game Name', game_time=timedelta(minutes=0))
-		user.in_waiting_room = False
-		other_user.in_waiting_room = False
+		party = Party.objects.create(winner=user, loser=other_user, user_red=user, user_blue=other_user, game_name='pong', game_time=timedelta(minutes=0))
+		user.in_waiting_pong = False
+		other_user.in_waiting_pong = False
 		user.save()
 		other_user.save()
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -1169,7 +1170,7 @@ def waiting_pong(request):
 		else:
 			return render(request, "pong/waiting_pong.html", {})
 	else:
-		user.in_waiting_room = True
+		user.in_waiting_pong = True
 		user.save()
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
 			html = render_to_string("pong/waiting_pong_content.html", {}, request=request)
@@ -1191,10 +1192,10 @@ def check_pong_match(request):
 		print(" ")
 		print("found OK !")
 		print(" ")
-		# party.user_red.in_waiting_room = False
-		# party.user_blue.in_waiting_room = False
-		# party.user_red.save()
-		# party.user_blue.save()
+		party.user_red.in_waiting_pong = False
+		party.user_blue.in_waiting_pong = False
+		party.user_red.save()
+		party.user_blue.save()
 		if party.user_red == user:
 			return JsonResponse({
 				'match_found': True,
@@ -1281,7 +1282,7 @@ def pong_page(request, party_id):
 				'id_blue': party.user_blue.id,
 			})
 
-def scoring(request, party_id):
+def scoring_pong(request, party_id):
 	if not request.user.is_authenticated:
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
 			html = render_to_string("pong/login_content.html", {}, request)
@@ -1297,8 +1298,8 @@ def scoring(request, party_id):
 		else:
 			party.winner = party.user_blue;
 			party.loser = party.user_red;
-		party.winner.in_waiting_room = False;
-		party.loser.in_waiting_room = False;
+		party.winner.in_waiting_pong = False;
+		party.loser.in_waiting_pong = False;
 		party.score_red = request.POST.get("red_score");
 		party.score_blue = request.POST.get("blue_score");
 		party.game_time = timedelta(milliseconds=int(request.POST.get("game_time")))
@@ -1308,7 +1309,7 @@ def scoring(request, party_id):
 		'end_correctly': True,
 	})
 
-def check_game_status(request, party_id):
+def check_pong_status(request, party_id):
 	if not request.user.is_authenticated:
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
 			html = render_to_string("pong/login_content.html", {}, request)
@@ -1330,7 +1331,7 @@ def check_game_status(request, party_id):
 			'id_party': False,
 		})
 
-def stop_waiting(request):
+def stop_waiting_pong(request):
 	if not request.user.is_authenticated:
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
 			html = render_to_string("pong/login_content.html", {}, request)
@@ -1338,13 +1339,12 @@ def stop_waiting(request):
 		else:
 			return HttpResponseRedirect(reverse("login"))
 
-	request.user.in_waiting_room = False;
+	request.user.in_waiting_pong = False;
 	request.user.save()
 	return JsonResponse({'everything_good': True})
 
 
 ###################### TOURNAMENT
-
 def tournament(request):
 	if not request.user.is_authenticated:
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -1424,6 +1424,7 @@ def tournament(request):
 		if tournament.participant1 and tournament.participant2 and tournament.participant3 and tournament.participant4:
 			if not tournament.party1:
 				tournament.party1 = Party.objects.create(
+					game_name="pong",
 					winner=tournament.participant1,
 					loser=tournament.participant2,
 					user_red=tournament.participant1,
@@ -1476,7 +1477,7 @@ def check_tournament_match(request):
 			'tournament_found': False,
 		})
 
-def scoring_next(request, party_id):
+def scoring_tournament(request, party_id):
 	if not request.user.is_authenticated:
 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
 			html = render_to_string("pong/login_content.html", {}, request)
@@ -1491,8 +1492,8 @@ def scoring_next(request, party_id):
 	else:
 		party.winner = party.user_blue;
 		party.loser = party.user_red;
-	party.winner.in_waiting_room = False;
-	party.loser.in_waiting_room = False;
+	party.winner.in_waiting_pong = False;
+	party.loser.in_waiting_pong = False;
 	party.score_blue = request.POST.get("blue_score");
 	party.score_red = request.POST.get("red_score");
 	party.is_ended = True;
@@ -1510,7 +1511,7 @@ def scoring_next(request, party_id):
 			loser=participant4,
 			user_red=participant3,
 			user_blue=participant4,
-			game_name='Half Final',
+			game_name='pong',
 			game_time=timedelta(minutes=0),
 			tournament=party.tournament)
 		party.tournament.save()
@@ -1534,7 +1535,7 @@ def scoring_next(request, party_id):
 			loser=party.tournament.party2.winner,
 			user_red=party.tournament.party1.winner,
 			user_blue=party.tournament.party2.winner,
-			game_name='Final',
+			game_name='pong',
 			game_time=timedelta(minutes=0),
 			tournament=party.tournament)
 		party.tournament.save()
@@ -1582,105 +1583,201 @@ def scoring_next(request, party_id):
 	})
 
 
+###################### TIC TAC TOE
+def waiting_tic(request):
+	if not request.user.is_authenticated:
+		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+			html = render_to_string("pong/login_content.html", {}, request)
+			return JsonResponse({'html': html, 'url' : reverse("login")})
+		else:
+			return HttpResponseRedirect(reverse("login"))
 
+	user = request.user
+	other_user = NewUser.objects.filter(in_waiting_tic=True).exclude(id=user.id).first()
+	if other_user:
+		party = Party.objects.create(winner=user, loser=other_user, user_red=user, user_blue=other_user, game_name='tic', game_time=timedelta(minutes=0))
+		user.in_waiting_tic = False
+		other_user.in_waiting_tic = False
+		user.save()
+		other_user.save()
+		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+			html = render_to_string("pong/waiting_tic_content.html", {}, request=request)
+			return JsonResponse({'html': html, 'url' : reverse("waiting_tic") })
+		else:
+			return render(request, "pong/waiting_tic.html", {})
+	else:
+		user.in_waiting_tic = True
+		user.save()
+		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+			html = render_to_string("pong/waiting_tic_content.html", {}, request=request)
+			return JsonResponse({'html': html, 'url' : reverse("waiting_tic") })
+		else:
+			return render(request, "pong/waiting_tic.html", {})
 
+def check_tic_match(request):
+	if not request.user.is_authenticated:
+		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+			html = render_to_string("pong/login_content.html", {}, request)
+			return JsonResponse({'html': html, 'url' : reverse("login")})
+		else:
+			return HttpResponseRedirect(reverse("login"))
 
-	# tournament = Tournament.objects.filter(
-	# 	Q(participant1=request.user) |
-	# 	Q(participant2=request.user) |
-	# 	Q(participant3=request.user) |
-	# 	Q(participant4=request.user)
-	# ).filter(
-	# 	Q(participant2__isnull=True) |
-	# 	Q(participant3__isnull=True) |
-	# 	Q(participant4__isnull=True)
-	# ).last()
+	user = request.user
+	party = Party.objects.filter(Q(user_red=user) | Q(user_blue=user), is_ended=False).last()
+	if party and party.user_red and party.user_blue:
+		print(" ")
+		print("found OK !")
+		print(" ")
+		# party.user_red.in_waiting_tic = False
+		# party.user_blue.in_waiting_tic = False
+		# party.user_red.save()
+		# party.user_blue.save()
+		if party.user_red == user:
+			return JsonResponse({
+				'match_found': True,
+				'party_end': party.is_ended,
+				'party_id': party.id,
+				'user_red': party.user_red.pseudo,
+				'user_blue': party.user_blue.pseudo,
+				'id_red': party.user_red.id,
+				'id_blue': party.user_blue.id,
+				'other_client': False
+			})
+		else:
+			return JsonResponse({
+				'match_found': False,
+				'party_end': party.is_ended,
+				'party_id': party.id,
+				'user_red': party.user_red.pseudo,
+				'user_blue': party.user_blue.pseudo,
+				'id_red': party.user_red.id,
+				'id_blue': party.user_blue.id,
+				'other_client': True
+			})
 
-	# if tournament is None:
-	# 	tournament = Tournament.objects.create(participant1=request.user)
+	else:
+		print(" ")
+		print("Nothing")
+		print(" ")
+		return JsonResponse({'match_found': False})
 
-	# if tournament.participant2 is None:
-	# 	tournament.participant2 = request.user
-	# elif tournament.participant3 is None:
-	# 	tournament.participant3 = request.user
-	# elif tournament.participant4 is None:
-	# 	tournament.participant4 = request.user
-	# tournament.save()
+def tic(request, party_id):
+	if not request.user.is_authenticated:
+		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+			html = render_to_string("pong/login_content.html", {}, request)
+			return JsonResponse({'html': html, 'url' : reverse("login")})
+		else:
+			return HttpResponseRedirect(reverse("login"))
 
-	# if tournament.participant1 is not None and tournament.participant2 is not None and tournament.participant3 is not None and tournament.participant4 is not None:
-	# 	tournament.party1 = Party(
-	# 		game_name="Pong Match",
-	# 		game_time=timedelta(minutes=0),
-	# 		user_red=tournament.participant1,
-	# 		user_blue=tournament.participant2,
-	# 		winner=tournament.participant1,
-	# 		loser=tournament.participant2,
-	# 		tournament=tournament
-	# 	)
-	# 	tournament.party1()
-	# 	tournament.save()
+	party = get_object_or_404(Party, id=party_id)
+	if party.is_ended:
+		return HttpResponseRedirect(reverse("home_game"))
 
+	if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+		if party.tournament:
+			html = render_to_string("pong/tic_content.html", {
+				'party_end': party.is_ended,
+				'party_id': party.id,
+				'user_red': party.user_red.pseudo,
+				'user_blue': party.user_blue.pseudo,
+				'alias_red': party.tournament.alias1,
+				'alias_blue': party.tournament.alias2,
+				'id_red': party.user_red.id,
+				'id_blue': party.user_blue.id,
+			}, request=request)
+			return JsonResponse({'html': html, 'url' : reverse("tic", args=[party_id]) })
+		else:
+			html = render_to_string("pong/tic_content.html", {
+				'party_end': party.is_ended,
+				'party_id': party.id,
+				'user_red': party.user_red.pseudo,
+				'user_blue': party.user_blue.pseudo,
+				'id_red': party.user_red.id,
+				'id_blue': party.user_blue.id,
+			}, request=request)
+			return JsonResponse({'html': html, 'url' : reverse("tic", args=[party_id]) })
+	else:
+		if party.tournament:
+			return render(request, 'pong/tic.html', {
+				'party_end': party.is_ended,
+				'party_id': party.id,
+				'user_red': party.user_red.pseudo,
+				'user_blue': party.user_blue.pseudo,
+				'alias_red': party.tournament.alias1,
+				'alias_blue': party.tournament.alias2,
+				'id_red': party.user_red.id,
+				'id_blue': party.user_blue.id,
+			})
+		else:
+			return render(request, 'pong/tic.html', {
+				'party_end': party.is_ended,
+				'party_id': party.id,
+				'user_red': party.user_red.pseudo,
+				'user_blue': party.user_blue.pseudo,
+				'id_red': party.user_red.id,
+				'id_blue': party.user_blue.id,
+			})
 
+def scoring_tic(request, party_id):
+	if not request.user.is_authenticated:
+		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+			html = render_to_string("pong/login_content.html", {}, request)
+			return JsonResponse({'html': html, 'url' : reverse("login")})
+		else:
+			return HttpResponseRedirect(reverse("login"))
 
-	# tournament = Tournament.objects.annotate(
-	# 	participant1_count=Count('participant1'),
-	# 	participant2_count=Count('participant2'),
-	# 	participant3_count=Count('participant3'),
-	# 	participant4_count=Count('participant4')
-	# ).annotate(
-	# 	num_participants=F('participant1_count') + F('participant2_count') + F('participant3_count') + F('participant4_count')
-	# ).order_by('num_participants').last()
+	party = get_object_or_404(Party, id=party_id)
+	if not party.is_ended:
+		if (request.POST.get("red_score") > request.POST.get("blue_score")):
+			party.winner = party.user_red;
+			party.loser = party.user_blue;
+		else:
+			party.winner = party.user_blue;
+			party.loser = party.user_red;
+		party.winner.in_waiting_tic = False;
+		party.loser.in_waiting_tic = False;
+		party.score_red = request.POST.get("red_score");
+		party.score_blue = request.POST.get("blue_score");
+		party.game_time = timedelta(milliseconds=int(request.POST.get("game_time")))
+		party.is_ended = True;
+		party.save()
+	return JsonResponse({
+		'end_correctly': True,
+	})
 
-	# is_participating = Tournament.objects.filter(
-	# 	Q(participant1=request.user) |
-	# 	Q(participant2=request.user) |
-	# 	Q(participant3=request.user) |
-	# 	Q(participant4=request.user)
-	# ).exists()
+def check_tic_status(request, party_id):
+	if not request.user.is_authenticated:
+		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+			html = render_to_string("pong/login_content.html", {}, request)
+			return JsonResponse({'html': html, 'url' : reverse("login")})
+		else:
+			return HttpResponseRedirect(reverse("login"))
 
-	# if not is_participating:
-	# 	Tournament.objects.create(participant1=request.user)
-	# 	is_participating = True
+	try:
+		party = Party.objects.get(id=party_id)
+		return JsonResponse({
+			'party': True,
+			'is_ended': party.is_ended,
+			'id_party': party.id,
+		})
+	except ObjectDoesNotExist:
+		return JsonResponse({
+			'party': False,
+			'is_ended': False,
+			'id_party': False,
+		})
 
-	# if is_participating:
-	# 	if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-	# 		html = render_to_string("pong/tournament_content.html", {}, request=request)
-	# 		return JsonResponse({'html': html, 'url' : reverse("tournament") })
-	# 	else:
-	# 		return render(request, "pong/tournament.html", {'message': 'Waiting for more players.'})
-	# else:
-	# 	if tournament is None:
-	# 		tournament = Tournament.objects.create(participant1=request.user)
+def stop_waiting_tic(request):
+	if not request.user.is_authenticated:
+		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+			html = render_to_string("pong/login_content.html", {}, request)
+			return JsonResponse({'html': html, 'url' : reverse("login")})
+		else:
+			return HttpResponseRedirect(reverse("login"))
 
-	# 	if tournament.participant1 is None:
-	# 		tournament.participant1 = request.user
-	# 	elif tournament.participant2 is None:
-	# 		tournament.participant2 = request.user
-	# 	elif tournament.participant3 is None:
-	# 		tournament.participant3 = request.user
-	# 	elif tournament.participant4 is None:
-	# 		tournament.participant4 = request.user
-	# 	tournament.save()
-
-	# 	if tournament.participant1 is not None and tournament.participant2 is not None and tournament.participant3 is not None and tournament.participant4 is not None:
-	# 		party = Party(
-	# 			game_name="Pong Match",
-	# 			game_time=timedelta(minutes=0),
-	# 			user_red=tournament.participant1,
-	# 			user_blue=tournament.participant2,
-	# 			winner=tournament.participant1,
-	# 			loser=tournament.participant2,
-	# 			tournament=tournament
-	# 		)
-	# 		party.save()
-
-	# 		return JsonResponse({'message': 'The tournament is full. The first match has started.'})
-	# 	else:
-	# 		if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-	# 			html = render_to_string("pong/tournament_content.html", {}, request=request)
-	# 			return JsonResponse({'html': html, 'url' : reverse("tournament") })
-	# 		else:
-	# 			return render(request, "pong/tournament.html", {'message': 'Waiting for more players.'})
+	request.user.in_waiting_tic = False;
+	request.user.save()
+	return JsonResponse({'everything_good': True})
 
 
 

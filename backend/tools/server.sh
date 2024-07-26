@@ -25,8 +25,8 @@ pip3 install pyotp
 pip3 install qrcode
 pip3 install Pillow
 
-python3.12 manage.py makemigrations
-# yes | python3.12 manage.py makemigrations
+# python3.12 manage.py makemigrations
+yes | python3.12 manage.py makemigrations
 
 if [ $? -ne 0 ]; then
 	log "Une erreur s'est produite lors de l'exécution de la commande -> python3.12 manage.py makemigrations."

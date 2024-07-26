@@ -54,7 +54,8 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
 	is_mfa_enabled = models.BooleanField(default=False)
 	objects = CustomAccountManager()
 	nbr_parties = models.IntegerField(default=0)
-	in_waiting_room = models.BooleanField(default=False)
+	in_waiting_pong = models.BooleanField(default=False)
+	in_waiting_tic = models.BooleanField(default=False)
 
 	groups = models.ManyToManyField(
 		'auth.Group',
